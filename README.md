@@ -1,39 +1,90 @@
-# RobotLab::DocumentStore
+# robot_lab-document_store
 
-TODO: Delete this and the text below, and describe your gem
+Embedding-based semantic document search for the [RobotLab](https://github.com/MadBomber/robot_lab) LLM agent framework.
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/robot_lab/document_store`. To experiment with that code, run `bin/console` for an interactive prompt.
+> [!CAUTION]
+> This gem is under active development. APIs may change without notice.
+
+## What it provides
+
+`RobotLab::DocumentStore` is a thread-safe, in-memory vector store backed by [fastembed](https://github.com/Anush008/fastembed-ruby) embeddings and cosine similarity search. It supports:
+
+- **`store(key, text)`** — embed and store a document under a symbol key
+- **`search(query, limit:)`** — return the top-N most similar documents by cosine similarity
+- **`delete(key)`** / **`clear`** — remove individual entries or wipe the store
+- **Asymmetric embedding** — passage embeddings for storage, query embeddings for retrieval
 
 ## Installation
 
-TODO: Replace `UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG` with your gem name right after releasing it to RubyGems.org. Please do not do it earlier due to security reasons. Alternatively, replace this section with instructions to install your gem from git if you don't plan to release to RubyGems.org.
+Add to your Gemfile:
 
-Install the gem and add to the application's Gemfile by executing:
-
-```bash
-bundle add UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+```ruby
+gem "robot_lab-document_store"
 ```
 
-If bundler is not being used to manage dependencies, install the gem by executing:
+## Quick Example
 
-```bash
-gem install UPDATE_WITH_YOUR_GEM_NAME_IMMEDIATELY_AFTER_RELEASE_TO_RUBYGEMS_ORG
+```ruby
+require "robot_lab/document_store"
+
+store = RobotLab::DocumentStore.new
+
+store.store(:alpha, "Ruby is a dynamic, open source programming language.")
+store.store(:beta,  "Python is widely used in data science and machine learning.")
+store.store(:gamma, "JavaScript runs in the browser and on Node.js servers.")
+
+results = store.search("What language is popular for AI?", limit: 2)
+results.each do |r|
+  puts "#{r[:key]} (score: #{"%.3f" % r[:score]})"
+end
+# => beta (score: 0.872)
+# => alpha (score: 0.641)
 ```
 
-## Usage
+## Custom Model
 
-TODO: Write usage instructions here
+```ruby
+store = RobotLab::DocumentStore.new(
+  model_name: "BAAI/bge-small-en-v1.5"
+)
+```
 
-## Development
+The default model is `"BAAI/bge-base-en-v1.5"`.
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake test` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+## Using with RobotLab Robots
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and the created tag, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+`DocumentStore` works well as in-memory retrieval for RAG (retrieval-augmented generation) workflows. Load documents at startup and pass relevant excerpts into robot context:
 
-## Contributing
+```ruby
+require "robot_lab"
+require "robot_lab/document_store"
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/robot_lab-document_store.
+store = RobotLab::DocumentStore.new
+store.store(:faq_1, "Our return policy allows returns within 30 days.")
+store.store(:faq_2, "Shipping typically takes 3-5 business days.")
+
+robot = RobotLab.build(
+  name: "support",
+  system_prompt: "You are a support agent. Use provided context to answer questions."
+)
+
+query  = "How long do I have to return an item?"
+chunks = store.search(query, limit: 2).map { |r| r[:text] }.join("\n")
+
+result = robot.run("Context:\n#{chunks}\n\nQuestion: #{query}")
+puts result.last_text_content
+```
+
+## Links
+
+- [RobotLab Core](https://github.com/MadBomber/robot_lab)
+- [fastembed-ruby](https://github.com/Anush008/fastembed-ruby)
+- [RubyGems](https://rubygems.org/gems/robot_lab-document_store)
 
 ## License
 
-The gem is available as open source under the terms of the [MIT License](https://opensource.org/licenses/MIT).
+MIT License - Copyright (c) 2025 Dewayne VanHoozer
+
+## Contributing
+
+Bug reports and pull requests are welcome on GitHub at https://github.com/MadBomber/robot_lab-document_store.
