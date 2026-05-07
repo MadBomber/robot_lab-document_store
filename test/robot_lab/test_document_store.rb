@@ -130,4 +130,24 @@ class RobotLab::DocumentStoreTest < Minitest::Test
   def test_clear_returns_self
     assert_equal @store, @store.clear
   end
+
+  # ---------------------------------------------------------------------------
+  # Semantic scoring quality — validates that search returns meaningful scores.
+  # These tests belong here, not in robot_lab core, because they verify
+  # DocumentStore's embedding behaviour rather than Robot logic.
+  # ---------------------------------------------------------------------------
+
+  def test_related_query_scores_above_low_threshold
+    @store.store(:skill_a, "Verifies and validates AgentSkills integration and catalog lookup")
+    results = @store.search("I need to verify the AgentSkills integration works", limit: 5)
+    assert results.any? { |r| r[:score] >= 0.3 },
+           "Expected at least one result with score >= 0.3 for a related query"
+  end
+
+  def test_unrelated_query_scores_below_perfect_threshold
+    @store.store(:skill_a, "Verifies and validates AgentSkills integration and catalog lookup")
+    results = @store.search("I need to verify the AgentSkills integration works", limit: 5)
+    refute results.all? { |r| r[:score] >= 0.999 },
+           "Expected no result to score >= 0.999 for a non-identical query"
+  end
 end

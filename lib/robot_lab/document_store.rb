@@ -1,9 +1,14 @@
 # frozen_string_literal: true
 
-require "fastembed"
 require_relative "document_store/version"
 
 module RobotLab
+  FASTEMBED_AVAILABLE = begin
+    require "fastembed"
+    true
+  rescue LoadError
+    false
+  end
   # Embedding-based document store for semantic search over arbitrary text.
   #
   # Documents are embedded using fastembed (BAAI/bge-small-en-v1.5 by default)
@@ -12,6 +17,11 @@ module RobotLab
   #
   # The embedding model is initialised lazily on first use — the ONNX model
   # file is downloaded on that first call (cached locally afterwards).
+  #
+  # When fastembed is not installed, DocumentStore falls back to a lightweight
+  # TF-IDF word-frequency embedder. The fallback is lower quality (no semantic
+  # understanding, only lexical overlap) but works offline with no downloads,
+  # making it suitable for development and testing.
   #
   # @example Standalone
   #   store = RobotLab::DocumentStore.new
@@ -29,12 +39,16 @@ module RobotLab
     # Default embedding model used when none is specified.
     DEFAULT_MODEL = "BAAI/bge-small-en-v1.5"
 
-    # @param model_name [String] fastembed model name
+    # @return [Boolean] whether fastembed is in use (true) or fallback (false)
+    attr_reader :using_fastembed
+
+    # @param model_name [String] fastembed model name (ignored when fastembed unavailable)
     def initialize(model_name: DEFAULT_MODEL)
-      @model_name = model_name
-      @documents  = {}  # key (Symbol) => { text: String, vector: Array<Float> }
-      @mutex      = Mutex.new
-      @model      = nil  # lazy: initialised on first embed call
+      @model_name      = model_name
+      @documents       = {}  # key (Symbol) => { text: String, vector: Array<Float> }
+      @mutex           = Mutex.new
+      @model           = nil  # lazy: initialised on first embed call
+      @using_fastembed = FASTEMBED_AVAILABLE
     end
 
     # Embed +text+ and store it under +key+.
@@ -108,37 +122,103 @@ module RobotLab
 
     private
 
-    def model
+    # ── Fastembed path ──────────────────────────────────────────────────────
+
+    def fastembed_model
       @model ||= Fastembed::TextEmbedding.new(model_name: @model_name, show_progress: false)
     end
 
     def passage_vector(text)
-      model.passage_embed([text]).to_a.first
+      if @using_fastembed
+        fastembed_model.passage_embed([text]).to_a.first
+      else
+        fallback_vector(text)
+      end
     end
 
     def query_vector(text)
-      model.query_embed([text]).to_a.first
+      if @using_fastembed
+        fastembed_model.query_embed([text]).to_a.first
+      else
+        fallback_vector(text)
+      end
     end
 
     def cosine_similarity(vec_a, vec_b)
       return 0.0 unless vec_a && vec_b
-      return 0.0 if vec_a.empty? || vec_b.empty?
-      return 0.0 if vec_a.length != vec_b.length
+
+      if @using_fastembed
+        return 0.0 if vec_a.empty? || vec_b.empty?
+        return 0.0 if vec_a.length != vec_b.length
+
+        dot    = 0.0
+        norm_a = 0.0
+        norm_b = 0.0
+
+        vec_a.each_with_index do |a, i|
+          b       = vec_b[i]
+          dot    += a * b
+          norm_a += a * a
+          norm_b += b * b
+        end
+
+        return 0.0 if norm_a.zero? || norm_b.zero?
+        dot / (Math.sqrt(norm_a) * Math.sqrt(norm_b))
+      else
+        sparse_cosine(vec_a, vec_b)
+      end
+    end
+
+    # ── Fallback TF-IDF word-frequency path ─────────────────────────────────
+
+    STOP_WORDS = %w[
+      a an the is are was were be been being am do does did
+      to of in and or but for with on at by from as into
+      it its this that these those i you he she we they
+      not no nor so yet
+    ].to_set.freeze
+
+    # Returns a sparse Hash{String => Float} L2-normalised term-frequency vector.
+    def fallback_vector(text)
+      counts = Hash.new(0)
+      text.downcase.scan(/[a-z]+/).each do |w|
+        next if STOP_WORDS.include?(w)
+        counts[stem(w)] += 1
+      end
+
+      return {} if counts.empty?
+
+      norm = Math.sqrt(counts.values.sum { |c| c * c }.to_f)
+      counts.transform_values { |c| c / norm }
+    end
+
+    def sparse_cosine(a, b)
+      return 0.0 if a.empty? || b.empty?
 
       dot    = 0.0
       norm_a = 0.0
       norm_b = 0.0
 
-      vec_a.each_with_index do |a, i|
-        b       = vec_b[i]
-        dot    += a * b
-        norm_a += a * a
-        norm_b += b * b
-      end
+      a.each { |k, v| dot += v * b[k].to_f; norm_a += v * v }
+      b.each { |_, v| norm_b += v * v }
 
       return 0.0 if norm_a.zero? || norm_b.zero?
-
       dot / (Math.sqrt(norm_a) * Math.sqrt(norm_b))
+    end
+
+    # Very basic Porter-style stemmer for English: strip common suffixes.
+    def stem(word)
+      word = word.dup
+      word.sub!(/ies$/, "y")    ||
+        word.sub!(/ness$/, "")  ||
+        word.sub!(/ment$/, "")  ||
+        word.sub!(/tion$/, "")  ||
+        word.sub!(/ing$/, "")   ||
+        word.sub!(/ed$/, "")    ||
+        word.sub!(/er$/, "")    ||
+        word.sub!(/ly$/, "")    ||
+        word.sub!(/s$/, "")
+      word
     end
   end
 end
