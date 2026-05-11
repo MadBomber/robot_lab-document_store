@@ -222,3 +222,5 @@ module RobotLab
     end
   end
 end
+
+RobotLab.register_extension(:document_store, RobotLab::DocumentStore)
