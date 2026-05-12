@@ -1,14 +1,8 @@
 # frozen_string_literal: true
 
-require_relative "document_store/version"
+require_relative 'document_store/version'
 
 module RobotLab
-  FASTEMBED_AVAILABLE = begin
-    require "fastembed"
-    true
-  rescue LoadError
-    false
-  end
   # Embedding-based document store for semantic search over arbitrary text.
   #
   # Documents are embedded using fastembed (BAAI/bge-small-en-v1.5 by default)
@@ -36,18 +30,25 @@ module RobotLab
   #   memory.search_documents("how to configure redis", limit: 3)
   #
   class DocumentStore
-    # Default embedding model used when none is specified.
-    DEFAULT_MODEL = "BAAI/bge-small-en-v1.5"
+    # @api private
+    FASTEMBED_AVAILABLE = begin
+      require 'fastembed'
+      true
+      # :nocov:
+    rescue LoadError
+      false
+      # :nocov:
+    end
 
-    # @return [Boolean] whether fastembed is in use (true) or fallback (false)
-    attr_reader :using_fastembed
+    # Default embedding model used when none is specified.
+    DEFAULT_MODEL = 'BAAI/bge-small-en-v1.5'
 
     # @param model_name [String] fastembed model name (ignored when fastembed unavailable)
     def initialize(model_name: DEFAULT_MODEL)
       @model_name      = model_name
-      @documents       = {}  # key (Symbol) => { text: String, vector: Array<Float> }
+      @documents       = {} # key (Symbol) => { text: String, vector: Array<Float> }
       @mutex           = Mutex.new
-      @model           = nil  # lazy: initialised on first embed call
+      @fastembed_model = nil # lazy: initialised on first embed call
       @using_fastembed = FASTEMBED_AVAILABLE
     end
 
@@ -120,12 +121,19 @@ module RobotLab
       self
     end
 
+    STOP_WORDS = %w[
+      a an the is are was were be been being am do does did
+      to of in and or but for with on at by from as into
+      it its this that these those i you he she we they
+      not no nor so yet
+    ].to_set.freeze
+
     private
 
     # ── Fastembed path ──────────────────────────────────────────────────────
 
     def fastembed_model
-      @model ||= Fastembed::TextEmbedding.new(model_name: @model_name, show_progress: false)
+      @fastembed_model ||= Fastembed::TextEmbedding.new(model_name: @model_name, show_progress: false)
     end
 
     def passage_vector(text)
@@ -163,6 +171,7 @@ module RobotLab
         end
 
         return 0.0 if norm_a.zero? || norm_b.zero?
+
         dot / (Math.sqrt(norm_a) * Math.sqrt(norm_b))
       else
         sparse_cosine(vec_a, vec_b)
@@ -171,18 +180,12 @@ module RobotLab
 
     # ── Fallback TF-IDF word-frequency path ─────────────────────────────────
 
-    STOP_WORDS = %w[
-      a an the is are was were be been being am do does did
-      to of in and or but for with on at by from as into
-      it its this that these those i you he she we they
-      not no nor so yet
-    ].to_set.freeze
-
     # Returns a sparse Hash{String => Float} L2-normalised term-frequency vector.
     def fallback_vector(text)
       counts = Hash.new(0)
       text.downcase.scan(/[a-z]+/).each do |w|
         next if STOP_WORDS.include?(w)
+
         counts[stem(w)] += 1
       end
 
@@ -192,35 +195,43 @@ module RobotLab
       counts.transform_values { |c| c / norm }
     end
 
-    def sparse_cosine(a, b)
-      return 0.0 if a.empty? || b.empty?
+    def sparse_cosine(vec_a, vec_b)
+      return 0.0 if vec_a.empty? || vec_b.empty?
 
       dot    = 0.0
       norm_a = 0.0
       norm_b = 0.0
 
-      a.each { |k, v| dot += v * b[k].to_f; norm_a += v * v }
-      b.each { |_, v| norm_b += v * v }
+      vec_a.each do |k, v|
+        dot += v * vec_b[k].to_f
+        norm_a += v * v
+      end
+      vec_b.each_value { |v| norm_b += v * v }
 
+      # :nocov:
       return 0.0 if norm_a.zero? || norm_b.zero?
+      # :nocov:
+
       dot / (Math.sqrt(norm_a) * Math.sqrt(norm_b))
     end
 
     # Very basic Porter-style stemmer for English: strip common suffixes.
     def stem(word)
       word = word.dup
-      word.sub!(/ies$/, "y")    ||
-        word.sub!(/ness$/, "")  ||
-        word.sub!(/ment$/, "")  ||
-        word.sub!(/tion$/, "")  ||
-        word.sub!(/ing$/, "")   ||
-        word.sub!(/ed$/, "")    ||
-        word.sub!(/er$/, "")    ||
-        word.sub!(/ly$/, "")    ||
-        word.sub!(/s$/, "")
+      word.sub!(/ies$/, 'y')    ||
+        word.sub!(/ness$/, '')  ||
+        word.sub!(/ment$/, '')  ||
+        word.sub!(/tion$/, '')  ||
+        word.sub!(/ing$/, '')   ||
+        word.sub!(/ed$/, '')    ||
+        word.sub!(/er$/, '')    ||
+        word.sub!(/ly$/, '')    ||
+        word.sub!(/s$/, '')
       word
     end
   end
 end
 
-RobotLab.register_extension(:document_store, RobotLab::DocumentStore)
+if defined?(RobotLab) && RobotLab.respond_to?(:register_extension)
+  RobotLab.register_extension(:document_store, RobotLab::DocumentStore)
+end

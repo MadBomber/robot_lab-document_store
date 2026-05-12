@@ -1,6 +1,29 @@
 module RobotLab
-  module DocumentStore
+  class DocumentStore
     VERSION: String
-    # See the writing guide of rbs: https://github.com/ruby/rbs#guides
+
+    FASTEMBED_AVAILABLE: bool
+    DEFAULT_MODEL: String
+    STOP_WORDS: Set[String]
+
+    def initialize: (?model_name: String) -> void
+
+    def store: (Symbol | String key, String text) -> self
+    def search: (String query, ?limit: Integer) -> Array[{ key: Symbol, text: String, score: Float }]
+    def size: () -> Integer
+    def keys: () -> Array[Symbol]
+    def empty?: () -> bool
+    def delete: (Symbol | String key) -> self
+    def clear: () -> self
+
+    private
+
+    def fastembed_model: () -> untyped
+    def passage_vector: (String text) -> (Array[Float] | Hash[String, Float])
+    def query_vector: (String text) -> (Array[Float] | Hash[String, Float])
+    def cosine_similarity: (Array[Float] | Hash[String, Float] | nil vec_a, Array[Float] | Hash[String, Float] | nil vec_b) -> Float
+    def fallback_vector: (String text) -> Hash[String, Float]
+    def sparse_cosine: (Hash[String, Float] vec_a, Hash[String, Float] vec_b) -> Float
+    def stem: (String word) -> String
   end
 end

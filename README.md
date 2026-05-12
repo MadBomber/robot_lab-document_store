@@ -49,7 +49,7 @@ store = RobotLab::DocumentStore.new(
 )
 ```
 
-The default model is `"BAAI/bge-base-en-v1.5"`.
+The default model is `"BAAI/bge-small-en-v1.5"`.
 
 ## Using with RobotLab Robots
 

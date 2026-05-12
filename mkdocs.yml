@@ -6,7 +6,8 @@ copyright: Copyright &copy; 2025 Dewayne VanHoozer
 
 repo_name: MadBomber/robot_lab-document_store
 repo_url: https://github.com/MadBomber/robot_lab-document_store
-edit_uri: edit/main/docs/
+edit_uri: edit/main/
+docs_dir: .
 
 theme:
   name: material
@@ -110,4 +111,4 @@ extra:
       name: robot_lab-document_store on RubyGems
 
 nav:
-  - Home: index.md
+  - Home: README.md

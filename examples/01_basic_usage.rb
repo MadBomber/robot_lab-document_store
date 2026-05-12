@@ -1,23 +1,27 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-# Example 26: Embedding-Based Document Store
+# Embedding-Based Document Store Demo
 #
-# Demonstrates Memory#store_document and Memory#search_documents — a
-# lightweight RAG store backed by fastembed (BAAI/bge-small-en-v1.5).
+# Demonstrates RobotLab::DocumentStore standalone and via Memory#store_document /
+# Memory#search_documents — a lightweight RAG store backed by fastembed
+# (BAAI/bge-small-en-v1.5).
 #
 # Documents are multi-paragraph engineering guides stored as Markdown files in:
-#   examples/26_document_store/
+#   examples/01_basic_usage/
 #
 # Usage:
-#   ruby examples/26_document_store.rb
+#   ruby examples/01_basic_usage.rb
+#   ./examples/01_basic_usage.rb
 #   (Downloads the ~23 MB ONNX model on first run; cached afterwards.)
 
-require "robot_lab"
-require "robot_lab/document_store"
+$LOAD_PATH.unshift File.expand_path('../lib', __dir__)
+
+require 'robot_lab'
+require 'robot_lab/document_store'
 
 puts "=" * 60
-puts "Example 26: Embedding-Based Document Store"
+puts "Embedding-Based Document Store Demo"
 puts "=" * 60
 puts
 puts "Note: First run downloads the fastembed model (~23 MB, cached)."
@@ -26,7 +30,7 @@ puts
 # ---------------------------------------------------------------------------
 # Load documents from the companion directory
 # ---------------------------------------------------------------------------
-DOC_DIR = File.join(__dir__, "26_document_store")
+DOC_DIR = File.join(__dir__, '01_basic_usage')
 
 DOCUMENTS = Dir[File.join(DOC_DIR, "*.md")].sort.each_with_object({}) do |path, h|
   key = File.basename(path, ".md").to_sym
