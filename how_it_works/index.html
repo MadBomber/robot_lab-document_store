@@ -12,29 +12,31 @@
         <meta name="author" content="Dewayne VanHoozer">
       
       
-        <link rel="canonical" href="https://madbomber.github.io/robot_lab-document_store/">
+        <link rel="canonical" href="https://madbomber.github.io/robot_lab-document_store/how_it_works/">
       
       
+        <link rel="prev" href="../api_reference/">
       
-        <link rel="next" href="getting_started/">
+      
+        <link rel="next" href="../rag_patterns/">
       
       
         
       
       
-      <link rel="icon" href="assets/images/favicon.png">
+      <link rel="icon" href="../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
     
     
       
-        <title>robot_lab-document_store</title>
+        <title>How It Works - robot_lab-document_store</title>
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
       
         
-        <link rel="stylesheet" href="assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
       
       
 
@@ -53,7 +55,7 @@
       
     
     
-    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -78,7 +80,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#robot_lab-document_store" class="md-skip">
+        <a href="#how-it-works" class="md-skip">
           Skip to content
         </a>
       
@@ -94,7 +96,7 @@
 
 <header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="." title="robot_lab-document_store" class="md-header__button md-logo" aria-label="robot_lab-document_store" data-md-component="logo">
+    <a href=".." title="robot_lab-document_store" class="md-header__button md-logo" aria-label="robot_lab-document_store" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.68 12.32a4.49 4.49 0 0 0-6.36.01 4.49 4.49 0 0 0 0 6.36 4.51 4.51 0 0 0 5.57.63L21 22.39 22.39 21l-3.09-3.11c1.13-1.77.87-4.09-.62-5.57m-1.41 4.95c-.98.98-2.56.97-3.54 0-.97-.98-.97-2.56.01-3.54.97-.97 2.55-.97 3.53 0 .97.98.97 2.56 0 3.54M10.9 20.1a6.5 6.5 0 0 1-1.48-2.32C6.27 17.25 4 15.76 4 14v3c0 2.21 3.58 4 8 4-.4-.26-.77-.56-1.1-.9M4 9v3c0 1.68 2.07 3.12 5 3.7v-.2c0-.93.2-1.85.58-2.69C6.34 12.3 4 10.79 4 9m8-6C7.58 3 4 4.79 4 7c0 2 3 3.68 6.85 4h.05c1.2-1.26 2.86-2 4.6-2 .91 0 1.81.19 2.64.56A3.22 3.22 0 0 0 20 7c0-2.21-3.58-4-8-4"/></svg>
@@ -114,7 +116,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Home
+              How It Works
             
           </span>
         </div>
@@ -224,11 +226,9 @@
   
   
   
-    
   
-  
-    <li class="md-tabs__item md-tabs__item--active">
-      <a href="." class="md-tabs__link">
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
         
   
   
@@ -247,7 +247,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="getting_started/" class="md-tabs__link">
+      <a href="../getting_started/" class="md-tabs__link">
         
   
   
@@ -266,7 +266,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="api_reference/" class="md-tabs__link">
+      <a href="../api_reference/" class="md-tabs__link">
         
   
   
@@ -283,9 +283,11 @@
   
   
   
+    
   
-    <li class="md-tabs__item">
-      <a href="how_it_works/" class="md-tabs__link">
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
         
   
   
@@ -304,7 +306,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="rag_patterns/" class="md-tabs__link">
+      <a href="../rag_patterns/" class="md-tabs__link">
         
   
   
@@ -345,7 +347,7 @@
 
 <nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="." title="robot_lab-document_store" class="md-nav__button md-logo" aria-label="robot_lab-document_store" data-md-component="logo">
+    <a href=".." title="robot_lab-document_store" class="md-nav__button md-logo" aria-label="robot_lab-document_store" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18.68 12.32a4.49 4.49 0 0 0-6.36.01 4.49 4.49 0 0 0 0 6.36 4.51 4.51 0 0 0 5.57.63L21 22.39 22.39 21l-3.09-3.11c1.13-1.77.87-4.09-.62-5.57m-1.41 4.95c-.98.98-2.56.97-3.54 0-.97-.98-.97-2.56.01-3.54.97-.97 2.55-.97 3.53 0 .97.98.97 2.56 0 3.54M10.9 20.1a6.5 6.5 0 0 1-1.48-2.32C6.27 17.25 4 15.76 4 14v3c0 2.21 3.58 4 8 4-.4-.26-.77-.56-1.1-.9M4 9v3c0 1.68 2.07 3.12 5 3.7v-.2c0-.93.2-1.85.58-2.69C6.34 12.3 4 10.79 4 9m8-6C7.58 3 4 4.79 4 7c0 2 3 3.68 6.85 4h.05c1.2-1.26 2.86-2 4.6-2 .91 0 1.81.19 2.64.56A3.22 3.22 0 0 0 20 7c0-2.21-3.58-4-8-4"/></svg>
@@ -372,6 +374,87 @@
       
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../getting_started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../api_reference/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
     
   
   
@@ -391,7 +474,7 @@
   <span class="md-ellipsis">
     
   
-    Home
+    How It Works
   
 
     
@@ -402,14 +485,14 @@
           <span class="md-nav__icon md-icon"></span>
         </label>
       
-      <a href="." class="md-nav__link md-nav__link--active">
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
   <span class="md-ellipsis">
     
   
-    Home
+    How It Works
   
 
     
@@ -437,10 +520,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#features" class="md-nav__link">
+  <a href="#architecture-overview" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Features
+        Architecture Overview
       
     </span>
   </a>
@@ -448,10 +531,121 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#navigation" class="md-nav__link">
+  <a href="#embedding-backend-selection" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Navigation
+        Embedding Backend Selection
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fastembed-path-dense-vectors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fastembed Path — Dense Vectors
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Fastembed Path — Dense Vectors">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#asymmetric-embedding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Asymmetric Embedding
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cosine-similarity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cosine Similarity
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tf-idf-fallback-path-sparse-vectors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TF-IDF Fallback Path — Sparse Vectors
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="TF-IDF Fallback Path — Sparse Vectors">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#processing-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Processing Pipeline
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stemmer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stemmer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#limitations-of-the-fallback" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limitations of the Fallback
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#thread-safety" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Thread Safety
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#robotlab-extension-registration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RobotLab Extension Registration
       
     </span>
   </a>
@@ -473,88 +667,7 @@
   
   
     <li class="md-nav__item">
-      <a href="getting_started/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Getting Started
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="api_reference/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    API Reference
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="how_it_works/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    How It Works
-  
-
-    
-  </span>
-  
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-  
-  
-    <li class="md-nav__item">
-      <a href="rag_patterns/" class="md-nav__link">
+      <a href="../rag_patterns/" class="md-nav__link">
         
   
   
@@ -603,10 +716,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#features" class="md-nav__link">
+  <a href="#architecture-overview" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Features
+        Architecture Overview
       
     </span>
   </a>
@@ -614,10 +727,121 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#navigation" class="md-nav__link">
+  <a href="#embedding-backend-selection" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Navigation
+        Embedding Backend Selection
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fastembed-path-dense-vectors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fastembed Path — Dense Vectors
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Fastembed Path — Dense Vectors">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#asymmetric-embedding" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Asymmetric Embedding
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cosine-similarity" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cosine Similarity
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#tf-idf-fallback-path-sparse-vectors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TF-IDF Fallback Path — Sparse Vectors
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="TF-IDF Fallback Path — Sparse Vectors">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#processing-pipeline" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Processing Pipeline
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#stemmer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stemmer
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#limitations-of-the-fallback" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Limitations of the Fallback
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#thread-safety" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Thread Safety
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#robotlab-extension-registration" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        RobotLab Extension Registration
       
     </span>
   </a>
@@ -649,7 +873,7 @@
 
 
   
-    <a href="https://github.com/MadBomber/robot_lab-document_store/edit/main/docs/index.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+    <a href="https://github.com/MadBomber/robot_lab-document_store/edit/main/docs/how_it_works.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -658,75 +882,162 @@
     
       
     
-    <a href="https://github.com/MadBomber/robot_lab-document_store/raw/main/docs/index.md" title="View source of this page" class="md-content__button md-icon">
+    <a href="https://github.com/MadBomber/robot_lab-document_store/raw/main/docs/how_it_works.md" title="View source of this page" class="md-content__button md-icon">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M17 18c.56 0 1 .44 1 1s-.44 1-1 1-1-.44-1-1 .44-1 1-1m0-3c-2.73 0-5.06 1.66-6 4 .94 2.34 3.27 4 6 4s5.06-1.66 6-4c-.94-2.34-3.27-4-6-4m0 6.5a2.5 2.5 0 0 1-2.5-2.5 2.5 2.5 0 0 1 2.5-2.5 2.5 2.5 0 0 1 2.5 2.5 2.5 2.5 0 0 1-2.5 2.5M9.27 20H6V4h7v5h5v4.07c.7.08 1.36.25 2 .49V8l-6-6H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h4.5a8.2 8.2 0 0 1-1.23-2"/></svg>
     </a>
   
 
 
-<h1 id="robot_lab-document_store">robot_lab-document_store<a class="headerlink" href="#robot_lab-document_store" title="Permanent link">&para;</a></h1>
-<p>Embedding-based semantic document search for the <a href="https://github.com/MadBomber/robot_lab">RobotLab</a> LLM agent framework.</p>
-<div class="admonition warning">
-<p class="admonition-title">Under active development</p>
-<p>APIs may change without notice until v1.0.</p>
-</div>
-<p><code>RobotLab::DocumentStore</code> is a thread-safe, in-memory vector store. Store arbitrary text documents, then retrieve the most relevant ones by natural-language query — no keyword overlap required.</p>
-<div class="language-ruby highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nb">require</span><span class="w"> </span><span class="s2">&quot;robot_lab/document_store&quot;</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">store</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="no">RobotLab</span><span class="o">::</span><span class="no">DocumentStore</span><span class="o">.</span><span class="n">new</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">store</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="ss">:sidekiq_guide</span><span class="p">,</span><span class="w">   </span><span class="no">File</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;docs/sidekiq.md&quot;</span><span class="p">))</span>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="n">store</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="ss">:postgres_guide</span><span class="p">,</span><span class="w">  </span><span class="no">File</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;docs/postgres.md&quot;</span><span class="p">))</span>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="n">store</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="ss">:incident_report</span><span class="p">,</span><span class="w"> </span><span class="no">File</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;docs/outage_2024.md&quot;</span><span class="p">))</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="n">hits</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">store</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;Jobs keep piling up when Stripe is down&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">limit</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="n">hits</span><span class="o">.</span><span class="n">each</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="o">|</span><span class="n">r</span><span class="o">|</span><span class="w"> </span><span class="nb">puts</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">#{</span><span class="n">r</span><span class="o">[</span><span class="ss">:key</span><span class="o">]</span><span class="si">}</span><span class="s2">  score=</span><span class="si">#{</span><span class="n">r</span><span class="o">[</span><span class="ss">:score</span><span class="o">].</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="w"> </span><span class="p">}</span>
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="c1"># =&gt; sidekiq_guide   score=0.847</span>
-</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="c1"># =&gt; incident_report score=0.612</span>
+<h1 id="how-it-works">How It Works<a class="headerlink" href="#how-it-works" title="Permanent link">&para;</a></h1>
+<h2 id="architecture-overview">Architecture Overview<a class="headerlink" href="#architecture-overview" title="Permanent link">&para;</a></h2>
+<p><img alt="Embedding Pipeline" src="../assets/architecture.svg" /></p>
+<p>Two operations drive the store: <strong><code>store</code></strong> (embed and save) and <strong><code>search</code></strong> (embed and rank). Both paths share the same embedding backend — fastembed when available, TF-IDF otherwise.</p>
+<hr />
+<h2 id="embedding-backend-selection">Embedding Backend Selection<a class="headerlink" href="#embedding-backend-selection" title="Permanent link">&para;</a></h2>
+<p>On load, <code>DocumentStore</code> attempts to <code>require 'fastembed'</code>. The result is captured in <code>FASTEMBED_AVAILABLE</code> and drives every subsequent embed call. There is no runtime switching — the backend is fixed for the lifetime of the object.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>require &#39;fastembed&#39;
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>  → success  : FASTEMBED_AVAILABLE = true   → dense vector path
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>  → LoadError: FASTEMBED_AVAILABLE = false  → TF-IDF fallback path
 </span></code></pre></div>
-<h2 id="features">Features<a class="headerlink" href="#features" title="Permanent link">&para;</a></h2>
+<hr />
+<h2 id="fastembed-path-dense-vectors">Fastembed Path — Dense Vectors<a class="headerlink" href="#fastembed-path-dense-vectors" title="Permanent link">&para;</a></h2>
+<p>When fastembed is available, the store uses <a href="https://huggingface.co/BAAI/bge-small-en-v1.5">BAAI/bge-small-en-v1.5</a> by default — a 33M parameter English bi-encoder that produces 384-dimensional float vectors.</p>
+<h3 id="asymmetric-embedding">Asymmetric Embedding<a class="headerlink" href="#asymmetric-embedding" title="Permanent link">&para;</a></h3>
+<p>The model uses <strong>separate encoders</strong> for passages (stored documents) and queries (search terms). This is deliberate: a passage encoder is optimised to capture what a document <em>contains</em>, while a query encoder is optimised to capture what a user <em>wants</em>. Using the same encoder for both degrades recall on semantically paraphrased queries.</p>
 <table>
 <thead>
 <tr>
-<th>Feature</th>
-<th>Detail</th>
+<th>Call</th>
+<th>Encoder used</th>
+<th>Purpose</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><strong>Semantic search</strong></td>
-<td>Cosine similarity over dense vector embeddings</td>
+<td><code>store(key, text)</code></td>
+<td><code>passage_embed</code></td>
+<td>Captures document content</td>
 </tr>
 <tr>
-<td><strong>Asymmetric embedding</strong></td>
-<td>Separate passage/query embeddings for higher recall</td>
-</tr>
-<tr>
-<td><strong>Thread-safe</strong></td>
-<td>Internal <code>Mutex</code> — safe for Puma, Sidekiq, Ractor workers</td>
-</tr>
-<tr>
-<td><strong>Zero-config fallback</strong></td>
-<td>TF-IDF word-frequency search when fastembed is unavailable</td>
-</tr>
-<tr>
-<td><strong>Lazy model init</strong></td>
-<td>ONNX model downloads on first use, cached locally</td>
-</tr>
-<tr>
-<td><strong>RobotLab integration</strong></td>
-<td>Drop-in via <code>Memory#store_document</code> / <code>Memory#search_documents</code></td>
+<td><code>search(query)</code></td>
+<td><code>query_embed</code></td>
+<td>Captures search intent</td>
 </tr>
 </tbody>
 </table>
-<h2 id="navigation">Navigation<a class="headerlink" href="#navigation" title="Permanent link">&para;</a></h2>
+<h3 id="cosine-similarity">Cosine Similarity<a class="headerlink" href="#cosine-similarity" title="Permanent link">&para;</a></h3>
+<p>Given a query vector <strong>q</strong> and a stored passage vector <strong>p</strong>, similarity is:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>similarity = dot(q, p) / (‖q‖ · ‖p‖)
+</span></code></pre></div>
+<p>This is the cosine of the angle between the vectors. A value of <code>1.0</code> means identical
+direction (maximum similarity); <code>0.0</code> means orthogonal (no relationship). The
+BGE model normalises its output to unit length, so the division reduces to a simple
+dot product — but <code>DocumentStore</code> performs explicit normalisation anyway to remain
+correct regardless of the model used.</p>
+<p><strong>Defensive guards</strong> return <code>0.0</code> for nil vectors, empty vectors, or length mismatches.
+These protect against partial or corrupted embed results without raising exceptions.</p>
+<hr />
+<h2 id="tf-idf-fallback-path-sparse-vectors">TF-IDF Fallback Path — Sparse Vectors<a class="headerlink" href="#tf-idf-fallback-path-sparse-vectors" title="Permanent link">&para;</a></h2>
+<p>When fastembed is unavailable, each document is converted to a sparse
+<code>Hash{String =&gt; Float}</code> where keys are stemmed terms and values are L2-normalised
+term frequencies.</p>
+<h3 id="processing-pipeline">Processing Pipeline<a class="headerlink" href="#processing-pipeline" title="Permanent link">&para;</a></h3>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>raw text
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>  → downcase
+</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>  → tokenise /[a-z]+/   (ASCII only — Unicode letters are dropped)
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>  → remove STOP_WORDS   (38 common English words: a, an, the, is, are, …)
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>  → Porter-style stem   (strips: -ies, -ness, -ment, -tion, -ing, -ed, -er, -ly, -s)
+</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>  → count term frequencies
+</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>  → L2-normalise counts  (divide each count by the Euclidean norm of the count vector)
+</span></code></pre></div>
+<p>The result is a unit-length sparse vector. Similarity between two sparse vectors
+uses the same cosine formula, but computed efficiently by iterating only over the
+keys present in the smaller vector.</p>
+<h3 id="stemmer">Stemmer<a class="headerlink" href="#stemmer" title="Permanent link">&para;</a></h3>
+<p>The stemmer applies suffix rules in priority order and stops at the first match:</p>
+<table>
+<thead>
+<tr>
+<th>Rule</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-ies</code> → <code>-y</code></td>
+<td><code>activities</code> → <code>activiti</code></td>
+</tr>
+<tr>
+<td><code>-ness</code> → ``</td>
+<td><code>darkness</code> → <code>dark</code></td>
+</tr>
+<tr>
+<td><code>-ment</code> → ``</td>
+<td><code>development</code> → <code>develop</code></td>
+</tr>
+<tr>
+<td><code>-tion</code> → ``</td>
+<td><code>configuration</code> → <code>configura</code></td>
+</tr>
+<tr>
+<td><code>-ing</code> → ``</td>
+<td><code>running</code> → <code>runn</code></td>
+</tr>
+<tr>
+<td><code>-ed</code> → ``</td>
+<td><code>deployed</code> → <code>deploy</code></td>
+</tr>
+<tr>
+<td><code>-er</code> → ``</td>
+<td><code>server</code> → <code>serv</code></td>
+</tr>
+<tr>
+<td><code>-ly</code> → ``</td>
+<td><code>quickly</code> → <code>quick</code></td>
+</tr>
+<tr>
+<td><code>-s</code> → ``</td>
+<td><code>robots</code> → <code>robot</code></td>
+</tr>
+</tbody>
+</table>
+<p>This is intentionally simple — not a full Porter stemmer. Its purpose is to improve
+lexical recall during development and testing, not to rival production semantic search.</p>
+<h3 id="limitations-of-the-fallback">Limitations of the Fallback<a class="headerlink" href="#limitations-of-the-fallback" title="Permanent link">&para;</a></h3>
 <ul>
-<li><a href="getting_started/">Getting Started</a> — install, first run, fallback mode</li>
-<li><a href="api_reference/">API Reference</a> — every public method documented</li>
-<li><a href="how_it_works/">How It Works</a> — embeddings, cosine similarity, TF-IDF fallback</li>
-<li><a href="rag_patterns/">RAG Patterns</a> — retrieval-augmented generation recipes</li>
+<li><strong>No semantic understanding</strong> — synonyms, paraphrases, and cross-lingual queries will not match</li>
+<li><strong>ASCII only</strong> — non-ASCII characters (accented letters, CJK, emoji) are silently dropped</li>
+<li><strong>Order-insensitive</strong> — "connection pool exhausted" and "exhausted pool connection" score identically</li>
 </ul>
+<p>For any production use case, install fastembed.</p>
+<hr />
+<h2 id="thread-safety">Thread Safety<a class="headerlink" href="#thread-safety" title="Permanent link">&para;</a></h2>
+<p>All public methods acquire an internal <code>Mutex</code> before touching <code>@documents</code>.
+Embedding (which can be slow — tens of milliseconds for the first call) happens
+<strong>outside</strong> the lock to avoid blocking concurrent readers.</p>
+<div class="language-ruby highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">store</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">text</span><span class="p">)</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="n">key</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">key</span><span class="o">.</span><span class="n">to_sym</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="n">vector</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">passage_vector</span><span class="p">(</span><span class="n">text</span><span class="p">)</span><span class="w">          </span><span class="c1"># ← compute outside the lock</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="vi">@mutex</span><span class="o">.</span><span class="n">synchronize</span><span class="w"> </span><span class="k">do</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="vi">@documents</span><span class="o">[</span><span class="n">key</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="ss">text</span><span class="p">:,</span><span class="w"> </span><span class="ss">vector</span><span class="p">:</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="c1"># ← write inside the lock</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">  </span><span class="k">end</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">  </span><span class="nb">self</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="k">end</span>
+</span></code></pre></div>
+<p>This means multiple threads can embed documents concurrently. The lock only
+serialises the final hash write and all reads.</p>
+<hr />
+<h2 id="robotlab-extension-registration">RobotLab Extension Registration<a class="headerlink" href="#robotlab-extension-registration" title="Permanent link">&para;</a></h2>
+<p>The file bottom contains:</p>
+<div class="language-ruby highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="k">if</span><span class="w"> </span><span class="n">defined?</span><span class="p">(</span><span class="no">RobotLab</span><span class="p">)</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="no">RobotLab</span><span class="o">.</span><span class="n">respond_to?</span><span class="p">(</span><span class="ss">:register_extension</span><span class="p">)</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="w">  </span><span class="no">RobotLab</span><span class="o">.</span><span class="n">register_extension</span><span class="p">(</span><span class="ss">:document_store</span><span class="p">,</span><span class="w"> </span><span class="no">RobotLab</span><span class="o">::</span><span class="no">DocumentStore</span><span class="p">)</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="k">end</span>
+</span></code></pre></div>
+<p>This registers the class with robot_lab core when both gems are loaded together,
+enabling <code>Memory#store_document</code>, <code>Memory#search_documents</code>, and <code>Memory#document_keys</code>
+on any <code>RobotLab::Memory</code> instance. The guard makes the file safe to <code>require</code>
+standalone without robot_lab present.</p>
 
 
 
@@ -763,15 +1074,31 @@
       
       <nav class="md-footer__inner md-grid" aria-label="Footer" >
         
+          
+          <a href="../api_reference/" class="md-footer__link md-footer__link--prev" aria-label="Previous: API Reference">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                API Reference
+              </div>
+            </div>
+          </a>
+        
         
           
-          <a href="getting_started/" class="md-footer__link md-footer__link--next" aria-label="Next: Getting Started">
+          <a href="../rag_patterns/" class="md-footer__link md-footer__link--next" aria-label="Next: RAG Patterns">
             <div class="md-footer__title">
               <span class="md-footer__direction">
                 Next
               </span>
               <div class="md-ellipsis">
-                Getting Started
+                RAG Patterns
               </div>
             </div>
             <div class="md-footer__button md-icon">
@@ -833,10 +1160,10 @@
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": ".", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.tabs.sticky", "navigation.path", "navigation.indexes", "navigation.top", "navigation.footer", "toc.follow", "search.suggest", "search.highlight", "search.share", "header.autohide", "content.code.copy", "content.code.annotate", "content.tabs.link", "content.tooltips", "content.action.edit", "content.action.view"], "search": "assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.tabs.sticky", "navigation.path", "navigation.indexes", "navigation.top", "navigation.footer", "toc.follow", "search.suggest", "search.highlight", "search.share", "header.autohide", "content.code.copy", "content.code.annotate", "content.tabs.link", "content.tooltips", "content.action.edit", "content.action.view"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
       
     
   </body>
