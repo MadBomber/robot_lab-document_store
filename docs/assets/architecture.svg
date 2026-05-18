@@ -1,0 +1,140 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 540" font-family="Roboto Mono, monospace">
+  <!-- transparent background -->
+
+  <!-- ── Title ── -->
+  <text x="410" y="32" text-anchor="middle" font-size="16" font-weight="bold" fill="#e2e8f0">DocumentStore — Embedding Pipeline</text>
+
+  <!-- ══════════════════════════════════════════════════════
+       LEFT COLUMN — STORE PATH
+  ═══════════════════════════════════════════════════════ -->
+
+  <!-- store() label -->
+  <text x="160" y="72" text-anchor="middle" font-size="13" font-weight="bold" fill="#94a3b8">store(key, text)</text>
+
+  <!-- Input text box -->
+  <rect x="60" y="82" width="200" height="44" rx="6" fill="#1e293b" stroke="#475569" stroke-width="1.5"/>
+  <text x="160" y="100" text-anchor="middle" font-size="11" fill="#94a3b8">Document Text</text>
+  <text x="160" y="116" text-anchor="middle" font-size="10" fill="#64748b">"Postgres query slow…"</text>
+
+  <!-- arrow down -->
+  <line x1="160" y1="126" x2="160" y2="150" stroke="#475569" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- fastembed decision diamond -->
+  <polygon points="160,152 210,176 160,200 110,176" fill="#1e3a5f" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="160" y="172" text-anchor="middle" font-size="10" fill="#93c5fd">fastembed</text>
+  <text x="160" y="185" text-anchor="middle" font-size="10" fill="#93c5fd">available?</text>
+
+  <!-- YES branch → passage_embed -->
+  <line x1="210" y1="176" x2="270" y2="176" stroke="#22c55e" stroke-width="1.5" marker-end="url(#arrGreen)"/>
+  <text x="237" y="169" text-anchor="middle" font-size="9" fill="#22c55e">yes</text>
+
+  <rect x="270" y="158" width="130" height="36" rx="6" fill="#14532d" stroke="#22c55e" stroke-width="1.5"/>
+  <text x="335" y="173" text-anchor="middle" font-size="10" fill="#86efac">passage_embed()</text>
+  <text x="335" y="187" text-anchor="middle" font-size="9" fill="#4ade80">dense Float[]  (384d)</text>
+
+  <!-- NO branch → fallback_vector -->
+  <line x1="160" y1="200" x2="160" y2="224" stroke="#f59e0b" stroke-width="1.5" marker-end="url(#arrAmber)"/>
+  <text x="172" y="216" font-size="9" fill="#f59e0b">no</text>
+
+  <rect x="60" y="224" width="200" height="36" rx="6" fill="#451a03" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="160" y="239" text-anchor="middle" font-size="10" fill="#fcd34d">fallback_vector()</text>
+  <text x="160" y="253" text-anchor="middle" font-size="9" fill="#fbbf24">sparse Hash  TF-IDF L2</text>
+
+  <!-- merge to store -->
+  <line x1="335" y1="194" x2="335" y2="310" stroke="#22c55e" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <line x1="160" y1="260" x2="160" y2="310" stroke="#f59e0b" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <line x1="160" y1="310" x2="248" y2="310" stroke="#475569" stroke-width="1.2"/>
+  <line x1="335" y1="310" x2="248" y2="310" stroke="#475569" stroke-width="1.2"/>
+  <line x1="248" y1="310" x2="248" y2="326" stroke="#475569" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- @documents store -->
+  <rect x="148" y="326" width="200" height="44" rx="6" fill="#1e1b4b" stroke="#818cf8" stroke-width="1.5"/>
+  <text x="248" y="344" text-anchor="middle" font-size="11" fill="#a5b4fc">@documents</text>
+  <text x="248" y="360" text-anchor="middle" font-size="9" fill="#6366f1">{ key → { text, vector } }</text>
+
+  <!-- Mutex badge -->
+  <rect x="334" y="330" width="50" height="18" rx="4" fill="#312e81" stroke="#6366f1" stroke-width="1"/>
+  <text x="359" y="343" text-anchor="middle" font-size="9" fill="#c7d2fe">Mutex</text>
+
+  <!-- ══════════════════════════════════════════════════════
+       RIGHT COLUMN — SEARCH PATH
+  ═══════════════════════════════════════════════════════ -->
+
+  <!-- search() label -->
+  <text x="640" y="72" text-anchor="middle" font-size="13" font-weight="bold" fill="#94a3b8">search(query, limit:)</text>
+
+  <!-- Query text box -->
+  <rect x="540" y="82" width="200" height="44" rx="6" fill="#1e293b" stroke="#475569" stroke-width="1.5"/>
+  <text x="640" y="100" text-anchor="middle" font-size="11" fill="#94a3b8">Query String</text>
+  <text x="640" y="116" text-anchor="middle" font-size="10" fill="#64748b">"Why is my query slow?"</text>
+
+  <!-- arrow down -->
+  <line x1="640" y1="126" x2="640" y2="150" stroke="#475569" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- decision diamond -->
+  <polygon points="640,152 690,176 640,200 590,176" fill="#1e3a5f" stroke="#3b82f6" stroke-width="1.5"/>
+  <text x="640" y="172" text-anchor="middle" font-size="10" fill="#93c5fd">fastembed</text>
+  <text x="640" y="185" text-anchor="middle" font-size="10" fill="#93c5fd">available?</text>
+
+  <!-- YES → query_embed -->
+  <line x1="690" y1="176" x2="750" y2="176" stroke="#22c55e" stroke-width="1.5" marker-end="url(#arrGreen)"/>
+  <text x="717" y="169" text-anchor="middle" font-size="9" fill="#22c55e">yes</text>
+
+  <rect x="750" y="158" width="56" height="36" rx="6" fill="#14532d" stroke="#22c55e" stroke-width="1.5"/>
+  <text x="778" y="173" text-anchor="middle" font-size="10" fill="#86efac">query_</text>
+  <text x="778" y="187" text-anchor="middle" font-size="10" fill="#86efac">embed()</text>
+
+  <!-- NO → fallback_vector -->
+  <line x1="640" y1="200" x2="640" y2="224" stroke="#f59e0b" stroke-width="1.5" marker-end="url(#arrAmber)"/>
+  <text x="652" y="216" font-size="9" fill="#f59e0b">no</text>
+
+  <rect x="540" y="224" width="200" height="36" rx="6" fill="#451a03" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="640" y="239" text-anchor="middle" font-size="10" fill="#fcd34d">fallback_vector()</text>
+  <text x="640" y="253" text-anchor="middle" font-size="9" fill="#fbbf24">sparse Hash  TF-IDF L2</text>
+
+  <!-- query_vec arrow to cosine_similarity -->
+  <line x1="640" y1="260" x2="640" y2="326" stroke="#475569" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="778" y1="194" x2="778" y2="310" stroke="#22c55e" stroke-width="1.2" stroke-dasharray="4,3"/>
+  <line x1="778" y1="310" x2="700" y2="310" stroke="#475569" stroke-width="1.2"/>
+  <line x1="700" y1="310" x2="700" y2="326" stroke="#475569" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- cosine_similarity box -->
+  <rect x="530" y="326" width="240" height="44" rx="6" fill="#1c1917" stroke="#d97706" stroke-width="1.5"/>
+  <text x="650" y="344" text-anchor="middle" font-size="11" fill="#fbbf24">cosine_similarity()</text>
+  <text x="650" y="360" text-anchor="middle" font-size="9" fill="#92400e">dot(q,p) / (‖q‖ · ‖p‖)  → score 0..1</text>
+
+  <!-- @documents feeds cosine via arrow -->
+  <line x1="348" y1="348" x2="530" y2="348" stroke="#818cf8" stroke-width="1.5" marker-end="url(#arrPurple)"/>
+  <text x="435" y="341" text-anchor="middle" font-size="9" fill="#818cf8">stored vectors</text>
+
+  <!-- Results box -->
+  <rect x="530" y="412" width="240" height="44" rx="6" fill="#1e293b" stroke="#38bdf8" stroke-width="1.5"/>
+  <text x="650" y="430" text-anchor="middle" font-size="11" fill="#7dd3fc">Ranked Results</text>
+  <text x="650" y="446" text-anchor="middle" font-size="9" fill="#38bdf8">[{ key:, text:, score: }, …]  sorted desc</text>
+
+  <line x1="650" y1="370" x2="650" y2="412" stroke="#475569" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- ══════════════════════════════════════════════════════
+       BOTTOM — FALLBACK DETAIL
+  ═══════════════════════════════════════════════════════ -->
+
+  <text x="410" y="490" text-anchor="middle" font-size="11" fill="#64748b">
+    TF-IDF fallback:  tokenise → strip stop words → Porter stem → L2-normalise → sparse cosine dot product
+  </text>
+
+  <!-- ── arrowhead markers ── -->
+  <defs>
+    <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#475569"/>
+    </marker>
+    <marker id="arrGreen" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#22c55e"/>
+    </marker>
+    <marker id="arrAmber" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#f59e0b"/>
+    </marker>
+    <marker id="arrPurple" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L8,3 z" fill="#818cf8"/>
+    </marker>
+  </defs>
+</svg>

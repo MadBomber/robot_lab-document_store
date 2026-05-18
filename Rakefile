@@ -6,7 +6,7 @@ require 'rake/testtask'
 Rake::TestTask.new(:test) do |t|
   t.libs << 'test'
   t.libs << 'lib'
-  t.test_files = FileList['test/**/test_*.rb']
+  t.test_files = FileList['test/**/*_test.rb', 'test/**/test_*.rb'].exclude('**/*_helper.rb')
   t.verbose = true
   t.ruby_opts << '-rtest_helper'
 end
@@ -101,4 +101,16 @@ task :quality do
 
   abort "\nQuality gate failed" if results.values.any?(:fail)
   puts "\nAll quality gates passed."
+end
+
+namespace :docs do
+  desc 'Build MkDocs documentation'
+  task :build do
+    sh 'mkdocs build'
+  end
+
+  desc 'Serve MkDocs documentation locally on http://localhost:8000'
+  task :serve do
+    sh 'mkdocs serve'
+  end
 end
