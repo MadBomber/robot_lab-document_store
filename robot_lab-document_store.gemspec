@@ -34,5 +34,6 @@ Gem::Specification.new do |spec|
 
   spec.require_paths = ['lib']
 
+  spec.add_dependency 'robot_lab', '~> 0.2.0'
   spec.add_dependency 'fastembed'
 end

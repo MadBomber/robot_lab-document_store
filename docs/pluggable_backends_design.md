@@ -54,7 +54,7 @@ empty?                 # Boolean
    - `FileSystem` stores raw text; durable serializes/deserializes `Entry` fields into the text before storing.
    - `FileSystem` supports structured metadata alongside text (a `meta:` hash), which durable populates.
 
-3. **Breaking change.** Refactoring `DocumentStore` from a concrete class to an abstract base is a breaking change — this is v0.2.0 territory.
+3. **Breaking change.** Refactoring `DocumentStore` from a concrete class to an abstract base is a breaking change — this is v0.3.0 territory (v0.2.1 is the current release).
 
 ## Rough Implementation Plan
 
@@ -63,4 +63,4 @@ empty?                 # Boolean
 3. Implement `DocumentStore::FileSystem` — port durable's `Store` (YAML, file locking, keyword search).
 4. Update `robot_lab-durable` gemspec to add `robot_lab-document_store` as a dependency.
 5. Replace `RobotLab::Durable::Store` with `DocumentStore::FileSystem` in durable's internals.
-6. Bump `robot_lab-document_store` to v0.2.0; bump `robot_lab-durable` to v0.2.0.
+6. Bump `robot_lab-document_store` to v0.3.0; bump `robot_lab-durable` to v0.3.0.
