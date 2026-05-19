@@ -711,7 +711,7 @@
 <p><code>FileSystem</code> supports structured metadata alongside text (a <code>meta:</code> hash), which durable populates.</p>
 </li>
 <li>
-<p><strong>Breaking change.</strong> Refactoring <code>DocumentStore</code> from a concrete class to an abstract base is a breaking change — this is v0.2.0 territory.</p>
+<p><strong>Breaking change.</strong> Refactoring <code>DocumentStore</code> from a concrete class to an abstract base is a breaking change — this is v0.3.0 territory (v0.2.1 is the current release).</p>
 </li>
 </ol>
 <h2 id="rough-implementation-plan">Rough Implementation Plan<a class="headerlink" href="#rough-implementation-plan" title="Permanent link">&para;</a></h2>
@@ -721,7 +721,7 @@
 <li>Implement <code>DocumentStore::FileSystem</code> — port durable's <code>Store</code> (YAML, file locking, keyword search).</li>
 <li>Update <code>robot_lab-durable</code> gemspec to add <code>robot_lab-document_store</code> as a dependency.</li>
 <li>Replace <code>RobotLab::Durable::Store</code> with <code>DocumentStore::FileSystem</code> in durable's internals.</li>
-<li>Bump <code>robot_lab-document_store</code> to v0.2.0; bump <code>robot_lab-durable</code> to v0.2.0.</li>
+<li>Bump <code>robot_lab-document_store</code> to v0.3.0; bump <code>robot_lab-durable</code> to v0.3.0.</li>
 </ol>
 
 
