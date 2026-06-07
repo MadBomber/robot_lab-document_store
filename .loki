@@ -1,0 +1,10 @@
+# frozen_string_literal: true
+# robot_lab-document_store — vector embeddings & semantic search.
+
+import_up "repo_dev.loki"
+
+class Tasks
+  @@gem_name ||= "robot_lab-document_store".freeze
+
+  header "robot_lab-document_store v#{gem_version} — vector embeddings & semantic search"
+end
