@@ -64,7 +64,7 @@ term frequencies.
 raw text
   → downcase
   → tokenise /[a-z]+/   (ASCII only — Unicode letters are dropped)
-  → remove STOP_WORDS   (38 common English words: a, an, the, is, are, …)
+  → remove STOP_WORDS   (45 common English words: a, an, the, is, are, …)
   → Porter-style stem   (strips: -ies, -ness, -ment, -tion, -ing, -ed, -er, -ly, -s)
   → count term frequencies
   → L2-normalise counts  (divide each count by the Euclidean norm of the count vector)
