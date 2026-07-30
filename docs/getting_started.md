@@ -2,7 +2,7 @@
 
 ## Prerequisites
 
-- Ruby 3.1+
+- Ruby 3.2+
 - **fastembed** (recommended) — requires a platform that can run ONNX Runtime (x86_64 and ARM64 macOS/Linux). On first use the ~23 MB `BAAI/bge-small-en-v1.5` model file is downloaded and cached in `~/.cache/fastembed`.
 - Without fastembed the store still works using the built-in TF-IDF fallback (see [Fallback Mode](#fallback-mode) below).
 
