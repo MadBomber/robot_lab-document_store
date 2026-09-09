@@ -1,0 +1,9 @@
+# False-positive suppressions for the typos quality gate (asgard).
+# Everything here was reviewed by hand — see git history for context.
+
+[default.extend-identifiers]
+# The Porter-style stemmer strips suffixes and its docs show raw stem
+# output; these are deliberate word fragments, not typos.
+ment     = "ment"      # the -ment suffix (stemmer regex + docs table)
+activiti = "activiti"  # stem of "activities" (docs table)
+runn     = "runn"      # stem of "running" (docs table)
