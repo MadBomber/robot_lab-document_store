@@ -29,6 +29,7 @@ module RobotLab
   #   memory.store_document(:readme, File.read("README.md"))
   #   memory.search_documents("how to configure redis", limit: 3)
   #
+  # :reek:RepeatedConditional -- @using_fastembed selects the dense vs sparse embedding path, fixed at construction.
   class DocumentStore
     # @api private
     FASTEMBED_AVAILABLE = begin
@@ -72,6 +73,7 @@ module RobotLab
     # @param limit [Integer] maximum number of results (default 5)
     # @return [Array<Hash>] results sorted by score descending.
     #   Each hash contains +:key+, +:text+, and +:score+ (Float 0.0..1.0).
+    # :reek:TooManyStatements -- linear embed/score/sort pipeline; the mutex block inflates the count.
     def search(query, limit: 5)
       return [] if empty?
 
@@ -155,32 +157,37 @@ module RobotLab
     def cosine_similarity(vec_a, vec_b)
       return 0.0 unless vec_a && vec_b
 
-      if @using_fastembed
-        return 0.0 if vec_a.empty? || vec_b.empty?
-        return 0.0 if vec_a.length != vec_b.length
+      @using_fastembed ? dense_cosine(vec_a, vec_b) : sparse_cosine(vec_a, vec_b)
+    end
 
-        dot    = 0.0
-        norm_a = 0.0
-        norm_b = 0.0
+    # :reek:FeatureEnvy -- pure vector math over its two arguments; there is no better home than the store that owns both paths.
+    # :reek:TooManyStatements -- one guarded dot-product/norm accumulation; splitting the loop would obscure the formula.
+    def dense_cosine(vec_a, vec_b)
+      return 0.0 if vec_a.empty? || vec_b.empty?
+      return 0.0 if vec_a.length != vec_b.length
 
-        vec_a.each_with_index do |a, i|
-          b       = vec_b[i]
-          dot    += a * b
-          norm_a += a * a
-          norm_b += b * b
-        end
+      dot    = 0.0
+      norm_a = 0.0
+      norm_b = 0.0
 
-        return 0.0 if norm_a.zero? || norm_b.zero?
-
-        dot / (Math.sqrt(norm_a) * Math.sqrt(norm_b))
-      else
-        sparse_cosine(vec_a, vec_b)
+      vec_a.each_with_index do |a, i|
+        b       = vec_b[i]
+        dot    += a * b
+        norm_a += a * a
+        norm_b += b * b
       end
+
+      return 0.0 if norm_a.zero? || norm_b.zero?
+
+      dot / (Math.sqrt(norm_a) * Math.sqrt(norm_b))
     end
 
     # ── Fallback TF-IDF word-frequency path ─────────────────────────────────
 
     # Returns a sparse Hash{String => Float} L2-normalised term-frequency vector.
+    # :reek:FeatureEnvy -- builds and normalises the local counts hash it returns; there is no other object involved.
+    # :reek:TooManyStatements -- one count-then-normalise sequence over the local hash.
+    # :reek:UncommunicativeVariableName -- single-char block param (w = word) is accepted project convention.
     def fallback_vector(text)
       counts = Hash.new(0)
       text.downcase.scan(/[a-z]+/).each do |w|
@@ -195,6 +202,7 @@ module RobotLab
       counts.transform_values { |c| c / norm }
     end
 
+    # :reek:TooManyStatements -- one guarded dot-product/norm accumulation; splitting the loop would obscure the formula.
     def sparse_cosine(vec_a, vec_b)
       return 0.0 if vec_a.empty? || vec_b.empty?
 
