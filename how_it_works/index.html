@@ -904,12 +904,12 @@
 <h2 id="fastembed-path-dense-vectors">Fastembed Path — Dense Vectors<a class="headerlink" href="#fastembed-path-dense-vectors" title="Permanent link">&para;</a></h2>
 <p>When fastembed is available, the store uses <a href="https://huggingface.co/BAAI/bge-small-en-v1.5">BAAI/bge-small-en-v1.5</a> by default — a 33M parameter English bi-encoder that produces 384-dimensional float vectors.</p>
 <h3 id="asymmetric-embedding">Asymmetric Embedding<a class="headerlink" href="#asymmetric-embedding" title="Permanent link">&para;</a></h3>
-<p>The model uses <strong>separate encoders</strong> for passages (stored documents) and queries (search terms). This is deliberate: a passage encoder is optimised to capture what a document <em>contains</em>, while a query encoder is optimised to capture what a user <em>wants</em>. Using the same encoder for both degrades recall on semantically paraphrased queries.</p>
+<p>The store uses <strong>separate fastembed calls</strong> for passages (stored documents) and queries (search terms). Both run through the same model; fastembed prepends <code>"passage: "</code> to stored text and <code>"query: "</code> to search text before embedding, so the two kinds of input are marked differently — one as what a document <em>contains</em>, the other as what a user <em>wants</em>.</p>
 <table>
 <thead>
 <tr>
 <th>Call</th>
-<th>Encoder used</th>
+<th>fastembed method</th>
 <th>Purpose</th>
 </tr>
 </thead>
@@ -935,6 +935,8 @@ direction (maximum similarity); <code>0.0</code> means orthogonal (no relationsh
 BGE model normalises its output to unit length, so the division reduces to a simple
 dot product — but <code>DocumentStore</code> performs explicit normalisation anyway to remain
 correct regardless of the model used.</p>
+<p>The result is <strong>clamped to <code>0.0..1.0</code></strong> on both embedding paths: a negative cosine
+becomes <code>0.0</code>, and a floating-point overshoot such as <code>1.0000000000000002</code> becomes <code>1.0</code>.</p>
 <p><strong>Defensive guards</strong> return <code>0.0</code> for nil vectors, empty vectors, or length mismatches.
 These protect against partial or corrupted embed results without raising exceptions.</p>
 <hr />
@@ -952,8 +954,12 @@ term frequencies.</p>
 </span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>  → L2-normalise counts  (divide each count by the Euclidean norm of the count vector)
 </span></code></pre></div>
 <p>The result is a unit-length sparse vector. Similarity between two sparse vectors
-uses the same cosine formula, but computed efficiently by iterating only over the
-keys present in the smaller vector.</p>
+uses the same cosine formula: the dot product iterates only over the terms of the
+query vector (looking each one up in the document vector), and the norms are
+recomputed from each vector's values.</p>
+<p>Despite the "TF-IDF" label used throughout these docs, no
+inverse-document-frequency weighting is applied — the vectors are plain
+L2-normalised term frequencies.</p>
 <h3 id="stemmer">Stemmer<a class="headerlink" href="#stemmer" title="Permanent link">&para;</a></h3>
 <p>The stemmer applies suffix rules in priority order and stops at the first match:</p>
 <table>
@@ -966,7 +972,7 @@ keys present in the smaller vector.</p>
 <tbody>
 <tr>
 <td><code>-ies</code> → <code>-y</code></td>
-<td><code>activities</code> → <code>activiti</code></td>
+<td><code>activities</code> → <code>activity</code></td>
 </tr>
 <tr>
 <td><code>-ness</code> → ``</td>
@@ -1019,14 +1025,16 @@ Embedding (which can be slow — tens of milliseconds for the first call) happen
 <div class="language-ruby highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="k">def</span><span class="w"> </span><span class="nf">store</span><span class="p">(</span><span class="n">key</span><span class="p">,</span><span class="w"> </span><span class="n">text</span><span class="p">)</span>
 </span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="n">key</span><span class="w">    </span><span class="o">=</span><span class="w"> </span><span class="n">key</span><span class="o">.</span><span class="n">to_sym</span>
 </span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="n">vector</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">passage_vector</span><span class="p">(</span><span class="n">text</span><span class="p">)</span><span class="w">          </span><span class="c1"># ← compute outside the lock</span>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="vi">@mutex</span><span class="o">.</span><span class="n">synchronize</span><span class="w"> </span><span class="k">do</span>
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="vi">@documents</span><span class="o">[</span><span class="n">key</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="ss">text</span><span class="p">:,</span><span class="w"> </span><span class="ss">vector</span><span class="p">:</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="c1"># ← write inside the lock</span>
-</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">  </span><span class="k">end</span>
-</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">  </span><span class="nb">self</span>
-</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="k">end</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="vi">@mutex</span><span class="o">.</span><span class="n">synchronize</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="vi">@documents</span><span class="o">[</span><span class="n">key</span><span class="o">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="ss">text</span><span class="p">:</span><span class="w"> </span><span class="n">text</span><span class="p">,</span><span class="w"> </span><span class="ss">vector</span><span class="p">:</span><span class="w"> </span><span class="n">vector</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="c1"># ← write inside the lock</span>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">  </span><span class="nb">self</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="k">end</span>
 </span></code></pre></div>
 <p>This means multiple threads can embed documents concurrently. The lock only
 serialises the final hash write and all reads.</p>
+<p>The lazy fastembed model initialisation has its own separate <code>Mutex</code>, so several
+threads making the first embed call at once load the model exactly once. That
+lock is released before embedding starts and is never held together with the
+documents lock.</p>
 <hr />
 <h2 id="robotlab-extension-registration">RobotLab Extension Registration<a class="headerlink" href="#robotlab-extension-registration" title="Permanent link">&para;</a></h2>
 <p>The file bottom contains:</p>
@@ -1035,8 +1043,8 @@ serialises the final hash write and all reads.</p>
 </span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="k">end</span>
 </span></code></pre></div>
 <p>This registers the class with robot_lab core when both gems are loaded together,
-enabling <code>Memory#store_document</code>, <code>Memory#search_documents</code>, and <code>Memory#document_keys</code>
-on any <code>RobotLab::Memory</code> instance. The guard makes the file safe to <code>require</code>
+enabling <code>Memory#store_document</code>, <code>Memory#search_documents</code>, <code>Memory#document_keys</code>,
+and <code>Memory#delete_document</code> on any <code>RobotLab::Memory</code> instance. The guard makes the file safe to <code>require</code>
 standalone without robot_lab present.</p>
 
 
@@ -1115,7 +1123,7 @@ standalone without robot_lab present.</p>
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      Copyright &copy; 2025 Dewayne VanHoozer
+      Copyright &copy; 2026 Dewayne VanHoozer
     </div>
   
   

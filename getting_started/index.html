@@ -771,8 +771,8 @@
 <h2 id="prerequisites">Prerequisites<a class="headerlink" href="#prerequisites" title="Permanent link">&para;</a></h2>
 <ul>
 <li>Ruby 4.0.9+</li>
-<li><strong>fastembed</strong> (recommended) — requires a platform that can run ONNX Runtime (x86_64 and ARM64 macOS/Linux). On first use the ~23 MB <code>BAAI/bge-small-en-v1.5</code> model file is downloaded and cached in <code>~/.cache/fastembed</code>.</li>
-<li>Without fastembed the store still works using the built-in TF-IDF fallback (see <a href="#fallback-mode">Fallback Mode</a> below).</li>
+<li><strong>fastembed</strong> (installed automatically as a runtime dependency) — requires a platform that can run ONNX Runtime (x86_64 and ARM64 macOS/Linux). On first use the ~130 MB <code>BAAI/bge-small-en-v1.5</code> model file is downloaded and cached in <code>~/.cache/fastembed</code>.</li>
+<li>If fastembed cannot be loaded the store still works using the built-in TF-IDF fallback (see <a href="#fallback-mode">Fallback Mode</a> below).</li>
 </ul>
 <h2 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h2>
 <p>Add to your <code>Gemfile</code>:</p>
@@ -785,63 +785,63 @@
 <div class="language-sh highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>gem<span class="w"> </span>install<span class="w"> </span>robot_lab-document_store
 </span></code></pre></div>
 <h3 id="installing-fastembed">Installing fastembed<a class="headerlink" href="#installing-fastembed" title="Permanent link">&para;</a></h3>
-<p>fastembed is an optional dependency. To get semantic search quality, install it:</p>
-<div class="language-ruby highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># Gemfile</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">gem</span><span class="w"> </span><span class="s2">"fastembed"</span>
-</span></code></pre></div>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>bundle<span class="w"> </span>install
-</span></code></pre></div>
+<p>fastembed is declared as a runtime dependency in the gemspec (as is <code>robot_lab</code>),
+so installing <code>robot_lab-document_store</code> installs it too — no separate Gemfile
+entry is needed.</p>
 <p>The ONNX model is downloaded on the first embed call and cached locally. Subsequent starts reuse the cache — no download needed.</p>
 <h2 id="first-run">First Run<a class="headerlink" href="#first-run" title="Permanent link">&para;</a></h2>
-<div class="language-ruby highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nb">require</span><span class="w"> </span><span class="s2">"robot_lab/document_store"</span>
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="n">store</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="no">RobotLab</span><span class="o">::</span><span class="no">DocumentStore</span><span class="o">.</span><span class="n">new</span>
-</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>
-</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="c1"># Store documents — embedding happens here (model downloads if needed)</span>
-</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="n">store</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="ss">:ruby_intro</span><span class="p">,</span><span class="w">    </span><span class="s2">"Ruby is a dynamic, open source programming language."</span><span class="p">)</span>
-</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="n">store</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="ss">:python_intro</span><span class="p">,</span><span class="w">  </span><span class="s2">"Python is widely used in data science and AI."</span><span class="p">)</span>
-</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a><span class="n">store</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="ss">:js_intro</span><span class="p">,</span><span class="w">      </span><span class="s2">"JavaScript runs in the browser and powers Node.js."</span><span class="p">)</span>
-</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>
-</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="c1"># Search — returns Array of { key:, text:, score: } hashes</span>
-</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="n">results</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">store</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">"Which language is used for machine learning?"</span><span class="p">,</span><span class="w"> </span><span class="ss">limit</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span>
-</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>
-</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="n">results</span><span class="o">.</span><span class="n">each</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">r</span><span class="o">|</span>
-</span><span id="__span-5-14"><a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="w">  </span><span class="nb">puts</span><span class="w"> </span><span class="s2">"</span><span class="si">#{</span><span class="n">r</span><span class="o">[</span><span class="ss">:key</span><span class="o">]</span><span class="si">}</span><span class="s2">  (</span><span class="si">#{</span><span class="n">r</span><span class="o">[</span><span class="ss">:score</span><span class="o">].</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="si">}</span><span class="s2">)"</span>
-</span><span id="__span-5-15"><a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="k">end</span>
-</span><span id="__span-5-16"><a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a><span class="c1"># =&gt; python_intro  (0.871)</span>
-</span><span id="__span-5-17"><a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="c1"># =&gt; ruby_intro    (0.634)</span>
+<div class="language-ruby highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nb">require</span><span class="w"> </span><span class="s2">"robot_lab/document_store"</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="n">store</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="no">RobotLab</span><span class="o">::</span><span class="no">DocumentStore</span><span class="o">.</span><span class="n">new</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>
+</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="c1"># Store documents — embedding happens here (model downloads if needed)</span>
+</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="n">store</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="ss">:ruby_intro</span><span class="p">,</span><span class="w">    </span><span class="s2">"Ruby is a dynamic, open source programming language."</span><span class="p">)</span>
+</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="n">store</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="ss">:python_intro</span><span class="p">,</span><span class="w">  </span><span class="s2">"Python is widely used in data science and AI."</span><span class="p">)</span>
+</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="n">store</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="ss">:js_intro</span><span class="p">,</span><span class="w">      </span><span class="s2">"JavaScript runs in the browser and powers Node.js."</span><span class="p">)</span>
+</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>
+</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="c1"># Search — returns Array of { key:, text:, score: } hashes</span>
+</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="n">results</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">store</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">"Which language is used for machine learning?"</span><span class="p">,</span><span class="w"> </span><span class="ss">limit</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span>
+</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a>
+</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="n">results</span><span class="o">.</span><span class="n">each</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">r</span><span class="o">|</span>
+</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">  </span><span class="nb">puts</span><span class="w"> </span><span class="s2">"</span><span class="si">#{</span><span class="n">r</span><span class="o">[</span><span class="ss">:key</span><span class="o">]</span><span class="si">}</span><span class="s2">  (</span><span class="si">#{</span><span class="n">r</span><span class="o">[</span><span class="ss">:score</span><span class="o">].</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="si">}</span><span class="s2">)"</span>
+</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="k">end</span>
+</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="c1"># =&gt; python_intro  (0.708)</span>
+</span><span id="__span-3-17"><a id="__codelineno-3-17" name="__codelineno-3-17" href="#__codelineno-3-17"></a><span class="c1"># =&gt; ruby_intro  (0.623)</span>
 </span></code></pre></div>
 <div class="admonition note">
 <p class="admonition-title">Model download on first run</p>
-<p>The first call to <code>store</code> or <code>search</code> triggers a ~23 MB ONNX model download.
+<p>The first call to <code>store</code> triggers a ~130 MB ONNX model download.
 All subsequent runs reuse the cached model. Set <code>FASTEMBED_CACHE_PATH</code> to control
 the cache location.</p>
 </div>
 <h2 id="fallback-mode">Fallback Mode<a class="headerlink" href="#fallback-mode" title="Permanent link">&para;</a></h2>
-<p>When <code>fastembed</code> is not installed, <code>DocumentStore</code> automatically switches to a
-TF-IDF word-frequency embedder. No configuration needed — the switch is silent.</p>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>fastembed installed?
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>  YES → dense vector embeddings via BAAI/bge-small-en-v1.5
-</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>   NO → sparse TF-IDF bag-of-words with Porter-style stemming
+<p>When <code>fastembed</code> cannot be loaded (<code>require 'fastembed'</code> raises <code>LoadError</code>),
+<code>DocumentStore</code> automatically switches to a TF-IDF word-frequency embedder. No
+configuration needed — the switch is silent.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>fastembed loadable?
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>  YES → dense vector embeddings via BAAI/bge-small-en-v1.5
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>   NO → sparse TF-IDF bag-of-words with Porter-style stemming
 </span></code></pre></div>
 <p>The fallback is lower quality — it relies on lexical overlap rather than semantic
 understanding — but it works offline with no model downloads, making it well-suited
 for development, CI, and test environments.</p>
-<div class="language-ruby highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="c1"># Works identically regardless of whether fastembed is installed</span>
-</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a><span class="n">store</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="no">RobotLab</span><span class="o">::</span><span class="no">DocumentStore</span><span class="o">.</span><span class="n">new</span>
-</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="n">store</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="ss">:doc</span><span class="p">,</span><span class="w"> </span><span class="s2">"Ruby programming language"</span><span class="p">)</span>
-</span><span id="__span-7-4"><a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="n">store</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">"Ruby development"</span><span class="p">,</span><span class="w"> </span><span class="ss">limit</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
+<div class="language-ruby highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="c1"># Works identically regardless of whether fastembed is available</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">store</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="no">RobotLab</span><span class="o">::</span><span class="no">DocumentStore</span><span class="o">.</span><span class="n">new</span>
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="n">store</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="ss">:doc</span><span class="p">,</span><span class="w"> </span><span class="s2">"Ruby programming language"</span><span class="p">)</span>
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="n">store</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">"Ruby development"</span><span class="p">,</span><span class="w"> </span><span class="ss">limit</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
 </span></code></pre></div>
 <h2 id="running-the-example">Running the Example<a class="headerlink" href="#running-the-example" title="Permanent link">&para;</a></h2>
 <p>The gem ships with a self-contained example that demonstrates all core features:</p>
-<div class="language-sh highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a>bundle<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>ruby<span class="w"> </span>examples/01_basic_usage.rb
+<div class="language-sh highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>bundle<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>ruby<span class="w"> </span>examples/01_basic_usage.rb
 </span></code></pre></div>
 <p>This loads five engineering runbook documents, runs several semantic queries,
-demonstrates deletion, and shows the RobotLab Memory integration.</p>
+demonstrates deletion, shows the RobotLab Memory integration, and prints a
+RAG prompt outline (no LLM call is made).</p>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
-<p>The example requires <code>robot_lab</code> core for the Memory integration section.
-The standalone <code>DocumentStore</code> section runs without it.</p>
+<p>The example does <code>require 'robot_lab'</code> at the top of the script (it is needed
+for the Memory integration section), so <code>robot_lab</code> core must be installed to
+run any part of it.</p>
 </div>
 
 
@@ -920,7 +920,7 @@ The standalone <code>DocumentStore</code> section runs without it.</p>
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      Copyright &copy; 2025 Dewayne VanHoozer
+      Copyright &copy; 2026 Dewayne VanHoozer
     </div>
   
   

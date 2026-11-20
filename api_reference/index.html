@@ -699,6 +699,28 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#fastembed_available" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FASTEMBED_AVAILABLE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#version" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VERSION
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1012,6 +1034,28 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#fastembed_available" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        FASTEMBED_AVAILABLE
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#version" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        VERSION
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1183,7 +1227,7 @@ similarity score descending.</p>
 <tr>
 <td><code>:score</code></td>
 <td><code>Float</code></td>
-<td>Cosine similarity score, range <code>0.0..1.0</code></td>
+<td>Cosine similarity score, clamped to <code>0.0..1.0</code></td>
 </tr>
 </tbody>
 </table>
@@ -1198,9 +1242,11 @@ the store is empty.</p>
 </span></code></pre></div>
 <div class="admonition tip">
 <p class="admonition-title">Score interpretation</p>
-<p>Scores above <code>0.7</code> indicate strong semantic similarity. Scores below <code>0.3</code>
-typically indicate weak or no relationship. The exact thresholds depend on
-the model and your document corpus.</p>
+<p>Scores above <code>0.7</code> indicate strong semantic similarity. With the default
+model, scores sit in a narrow band — in the bundled example corpus even a
+completely unrelated query scores around <code>0.5</code> against every document — so
+compare scores relative to each other rather than against zero. The exact
+thresholds depend on the model and your document corpus.</p>
 </div>
 <hr />
 <h2 id="reading-metadata">Reading Metadata<a class="headerlink" href="#reading-metadata" title="Permanent link">&para;</a></h2>
@@ -1261,20 +1307,30 @@ the model and your document corpus.</p>
 <h3 id="stop_words"><code>STOP_WORDS</code><a class="headerlink" href="#stop_words" title="Permanent link">&para;</a></h3>
 <p>A frozen <code>Set&lt;String&gt;</code> of common English words excluded from TF-IDF indexing
 (<code>a</code>, <code>an</code>, <code>the</code>, <code>is</code>, <code>are</code>, …). Only relevant when fastembed is unavailable.</p>
+<h3 id="fastembed_available"><code>FASTEMBED_AVAILABLE</code><a class="headerlink" href="#fastembed_available" title="Permanent link">&para;</a></h3>
+<p><code>true</code> if <code>require 'fastembed'</code> succeeded when this file was loaded, <code>false</code>
+otherwise. Marked <code>@api private</code> in the source — it selects the dense or
+fallback embedding path for every store created afterwards.</p>
+<h3 id="version"><code>VERSION</code><a class="headerlink" href="#version" title="Permanent link">&para;</a></h3>
+<div class="language-ruby highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="no">RobotLab</span><span class="o">::</span><span class="no">DocumentStore</span><span class="o">::</span><span class="no">VERSION</span><span class="w">  </span><span class="c1"># =&gt; "0.6.1"</span>
+</span></code></pre></div>
 <hr />
 <h2 id="thread-safety">Thread Safety<a class="headerlink" href="#thread-safety" title="Permanent link">&para;</a></h2>
 <p>All public methods are thread-safe. An internal <code>Mutex</code> serialises access to
-the document hash. You can safely share a single <code>DocumentStore</code> instance across
-Puma threads, Sidekiq workers, or Ractor-based agents.</p>
-<div class="language-ruby highlight"><pre><span></span><code><span id="__span-9-1"><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="c1"># Safe: multiple threads can store and search concurrently</span>
-</span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="n">store</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="no">RobotLab</span><span class="o">::</span><span class="no">DocumentStore</span><span class="o">.</span><span class="n">new</span>
-</span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
-</span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="n">threads</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="o">.</span><span class="n">times</span><span class="o">.</span><span class="n">map</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">i</span><span class="o">|</span>
-</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">  </span><span class="no">Thread</span><span class="o">.</span><span class="n">new</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">store</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="ss">:"doc_</span><span class="si">#{</span><span class="n">i</span><span class="si">}</span><span class="ss">"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Document </span><span class="si">#{</span><span class="n">i</span><span class="si">}</span><span class="s2"> text content"</span><span class="p">)</span><span class="w"> </span><span class="p">}</span>
-</span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="k">end</span>
-</span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="n">threads</span><span class="o">.</span><span class="n">each</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:join</span><span class="p">)</span>
-</span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>
-</span><span id="__span-9-9"><a id="__codelineno-9-9" name="__codelineno-9-9" href="#__codelineno-9-9"></a><span class="n">store</span><span class="o">.</span><span class="n">size</span><span class="w">  </span><span class="c1"># =&gt; 10</span>
+the document hash, and a second one guards the lazy model initialisation so
+concurrent first calls load the model only once. You can safely share a single <code>DocumentStore</code> instance across
+Puma threads or Sidekiq workers. It cannot be shared across Ractors: the
+internal <code>Mutex</code> is not shareable, and a store passed into a Ractor is copied,
+so writes made there never reach the original.</p>
+<div class="language-ruby highlight"><pre><span></span><code><span id="__span-10-1"><a id="__codelineno-10-1" name="__codelineno-10-1" href="#__codelineno-10-1"></a><span class="c1"># Safe: multiple threads can store and search concurrently</span>
+</span><span id="__span-10-2"><a id="__codelineno-10-2" name="__codelineno-10-2" href="#__codelineno-10-2"></a><span class="n">store</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="no">RobotLab</span><span class="o">::</span><span class="no">DocumentStore</span><span class="o">.</span><span class="n">new</span>
+</span><span id="__span-10-3"><a id="__codelineno-10-3" name="__codelineno-10-3" href="#__codelineno-10-3"></a>
+</span><span id="__span-10-4"><a id="__codelineno-10-4" name="__codelineno-10-4" href="#__codelineno-10-4"></a><span class="n">threads</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="o">.</span><span class="n">times</span><span class="o">.</span><span class="n">map</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">i</span><span class="o">|</span>
+</span><span id="__span-10-5"><a id="__codelineno-10-5" name="__codelineno-10-5" href="#__codelineno-10-5"></a><span class="w">  </span><span class="no">Thread</span><span class="o">.</span><span class="n">new</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">store</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="ss">:"doc_</span><span class="si">#{</span><span class="n">i</span><span class="si">}</span><span class="ss">"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Document </span><span class="si">#{</span><span class="n">i</span><span class="si">}</span><span class="s2"> text content"</span><span class="p">)</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-10-6"><a id="__codelineno-10-6" name="__codelineno-10-6" href="#__codelineno-10-6"></a><span class="k">end</span>
+</span><span id="__span-10-7"><a id="__codelineno-10-7" name="__codelineno-10-7" href="#__codelineno-10-7"></a><span class="n">threads</span><span class="o">.</span><span class="n">each</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:join</span><span class="p">)</span>
+</span><span id="__span-10-8"><a id="__codelineno-10-8" name="__codelineno-10-8" href="#__codelineno-10-8"></a>
+</span><span id="__span-10-9"><a id="__codelineno-10-9" name="__codelineno-10-9" href="#__codelineno-10-9"></a><span class="n">store</span><span class="o">.</span><span class="n">size</span><span class="w">  </span><span class="c1"># =&gt; 10</span>
 </span></code></pre></div>
 
 
@@ -1353,7 +1409,7 @@ Puma threads, Sidekiq workers, or Ractor-based agents.</p>
       <div class="md-copyright">
   
     <div class="md-copyright__highlight">
-      Copyright &copy; 2025 Dewayne VanHoozer
+      Copyright &copy; 2026 Dewayne VanHoozer
     </div>
   
   
