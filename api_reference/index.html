@@ -25,7 +25,7 @@
       
       
       <link rel="icon" href="../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.2">
     
     
       
@@ -33,10 +33,10 @@
       
     
     
-      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      <link rel="stylesheet" href="../assets/stylesheets/main.57a0d79d.min.css">
       
         
-        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+        <link rel="stylesheet" href="../assets/stylesheets/palette.fb2fffe2.min.css">
       
       
 
@@ -1096,7 +1096,7 @@
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">store</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="no">RobotLab</span><span class="o">::</span><span class="no">DocumentStore</span><span class="o">.</span><span class="n">new</span>
 </span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>
 </span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># Custom model</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">store</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="no">RobotLab</span><span class="o">::</span><span class="no">DocumentStore</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">model_name</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;BAAI/bge-base-en-v1.5&quot;</span><span class="p">)</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">store</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="no">RobotLab</span><span class="o">::</span><span class="no">DocumentStore</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="ss">model_name</span><span class="p">:</span><span class="w"> </span><span class="s2">"BAAI/bge-base-en-v1.5"</span><span class="p">)</span>
 </span></code></pre></div>
 <p>The embedding model is initialised lazily — no download or computation happens
 at construction time.</p>
@@ -1127,9 +1127,9 @@ key it is replaced. Embedding happens synchronously before the method returns.</
 </tbody>
 </table>
 <p><strong>Returns:</strong> <code>self</code> — supports method chaining.</p>
-<div class="language-ruby highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">store</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="ss">:readme</span><span class="p">,</span><span class="w">   </span><span class="no">File</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;README.md&quot;</span><span class="p">))</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">     </span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="ss">:changelog</span><span class="p">,</span><span class="w"> </span><span class="no">File</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;CHANGELOG.md&quot;</span><span class="p">))</span>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">     </span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="ss">:guide</span><span class="p">,</span><span class="w">     </span><span class="no">File</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;GUIDE.md&quot;</span><span class="p">))</span>
+<div class="language-ruby highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="n">store</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="ss">:readme</span><span class="p">,</span><span class="w">   </span><span class="no">File</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">"README.md"</span><span class="p">))</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="w">     </span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="ss">:changelog</span><span class="p">,</span><span class="w"> </span><span class="no">File</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">"CHANGELOG.md"</span><span class="p">))</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">     </span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="ss">:guide</span><span class="p">,</span><span class="w">     </span><span class="no">File</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">"GUIDE.md"</span><span class="p">))</span>
 </span></code></pre></div>
 <hr />
 <h2 id="searching">Searching<a class="headerlink" href="#searching" title="Permanent link">&para;</a></h2>
@@ -1189,11 +1189,11 @@ similarity score descending.</p>
 </table>
 <p>Results are sorted by <code>:score</code> descending (most similar first). Returns <code>[]</code> if
 the store is empty.</p>
-<div class="language-ruby highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">results</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">store</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">&quot;database connection pool exhausted&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">limit</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span>
+<div class="language-ruby highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="n">results</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">store</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="s2">"database connection pool exhausted"</span><span class="p">,</span><span class="w"> </span><span class="ss">limit</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">)</span>
 </span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="n">results</span><span class="o">.</span><span class="n">each</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">r</span><span class="o">|</span>
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="nb">puts</span><span class="w"> </span><span class="s2">&quot;</span><span class="si">#{</span><span class="n">r</span><span class="o">[</span><span class="ss">:key</span><span class="o">].</span><span class="n">to_s</span><span class="o">.</span><span class="n">ljust</span><span class="p">(</span><span class="mi">24</span><span class="p">)</span><span class="si">}</span><span class="s2"> score=</span><span class="si">#{</span><span class="n">r</span><span class="o">[</span><span class="ss">:score</span><span class="o">].</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="nb">puts</span><span class="w"> </span><span class="s2">&quot;  </span><span class="si">#{</span><span class="n">r</span><span class="o">[</span><span class="ss">:text</span><span class="o">][</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">80</span><span class="o">]</span><span class="si">}</span><span class="s2">…&quot;</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="nb">puts</span><span class="w"> </span><span class="s2">"</span><span class="si">#{</span><span class="n">r</span><span class="o">[</span><span class="ss">:key</span><span class="o">].</span><span class="n">to_s</span><span class="o">.</span><span class="n">ljust</span><span class="p">(</span><span class="mi">24</span><span class="p">)</span><span class="si">}</span><span class="s2"> score=</span><span class="si">#{</span><span class="n">r</span><span class="o">[</span><span class="ss">:score</span><span class="o">].</span><span class="n">round</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
+</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="nb">puts</span><span class="w"> </span><span class="s2">"  </span><span class="si">#{</span><span class="n">r</span><span class="o">[</span><span class="ss">:text</span><span class="o">][</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">80</span><span class="o">]</span><span class="si">}</span><span class="s2">…"</span>
 </span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="k">end</span>
 </span></code></pre></div>
 <div class="admonition tip">
@@ -1207,19 +1207,19 @@ the model and your document corpus.</p>
 <h3 id="size-integer"><code>size → Integer</code><a class="headerlink" href="#size-integer" title="Permanent link">&para;</a></h3>
 <p>Returns the number of stored documents.</p>
 <div class="language-ruby highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="n">store</span><span class="o">.</span><span class="n">size</span><span class="w">  </span><span class="c1"># =&gt; 0</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">store</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="ss">:a</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;text&quot;</span><span class="p">)</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">store</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="ss">:a</span><span class="p">,</span><span class="w"> </span><span class="s2">"text"</span><span class="p">)</span>
 </span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="n">store</span><span class="o">.</span><span class="n">size</span><span class="w">  </span><span class="c1"># =&gt; 1</span>
 </span></code></pre></div>
 <h3 id="keys-arraysymbol"><code>keys → Array&lt;Symbol&gt;</code><a class="headerlink" href="#keys-arraysymbol" title="Permanent link">&para;</a></h3>
 <p>Returns the keys of all stored documents in insertion order.</p>
-<div class="language-ruby highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">store</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="ss">:alpha</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;…&quot;</span><span class="p">)</span>
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="n">store</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="ss">:beta</span><span class="p">,</span><span class="w">  </span><span class="s2">&quot;…&quot;</span><span class="p">)</span>
+<div class="language-ruby highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="n">store</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="ss">:alpha</span><span class="p">,</span><span class="w"> </span><span class="s2">"…"</span><span class="p">)</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="n">store</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="ss">:beta</span><span class="p">,</span><span class="w">  </span><span class="s2">"…"</span><span class="p">)</span>
 </span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="n">store</span><span class="o">.</span><span class="n">keys</span><span class="w">  </span><span class="c1"># =&gt; [:alpha, :beta]</span>
 </span></code></pre></div>
 <h3 id="empty-boolean"><code>empty? → Boolean</code><a class="headerlink" href="#empty-boolean" title="Permanent link">&para;</a></h3>
 <p>Returns <code>true</code> if no documents are stored.</p>
 <div class="language-ruby highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="n">store</span><span class="o">.</span><span class="n">empty?</span><span class="w">  </span><span class="c1"># =&gt; true</span>
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">store</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="ss">:a</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;text&quot;</span><span class="p">)</span>
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="n">store</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="ss">:a</span><span class="p">,</span><span class="w"> </span><span class="s2">"text"</span><span class="p">)</span>
 </span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="n">store</span><span class="o">.</span><span class="n">empty?</span><span class="w">  </span><span class="c1"># =&gt; false</span>
 </span></code></pre></div>
 <hr />
@@ -1244,7 +1244,7 @@ the model and your document corpus.</p>
 </table>
 <p><strong>Returns:</strong> <code>self</code>.</p>
 <div class="language-ruby highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="n">store</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="ss">:outdated_doc</span><span class="p">)</span>
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="n">store</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">&quot;also_works_with_strings&quot;</span><span class="p">)</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="n">store</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="s2">"also_works_with_strings"</span><span class="p">)</span>
 </span></code></pre></div>
 <h3 id="clear-self"><code>clear → self</code><a class="headerlink" href="#clear-self" title="Permanent link">&para;</a></h3>
 <p>Removes all stored documents.</p>
@@ -1255,7 +1255,7 @@ the model and your document corpus.</p>
 <hr />
 <h2 id="constants">Constants<a class="headerlink" href="#constants" title="Permanent link">&para;</a></h2>
 <h3 id="default_model"><code>DEFAULT_MODEL</code><a class="headerlink" href="#default_model" title="Permanent link">&para;</a></h3>
-<div class="language-ruby highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="no">RobotLab</span><span class="o">::</span><span class="no">DocumentStore</span><span class="o">::</span><span class="no">DEFAULT_MODEL</span><span class="w">  </span><span class="c1"># =&gt; &quot;BAAI/bge-small-en-v1.5&quot;</span>
+<div class="language-ruby highlight"><pre><span></span><code><span id="__span-8-1"><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="no">RobotLab</span><span class="o">::</span><span class="no">DocumentStore</span><span class="o">::</span><span class="no">DEFAULT_MODEL</span><span class="w">  </span><span class="c1"># =&gt; "BAAI/bge-small-en-v1.5"</span>
 </span></code></pre></div>
 <p>The fastembed model used when no <code>model_name:</code> is specified.</p>
 <h3 id="stop_words"><code>STOP_WORDS</code><a class="headerlink" href="#stop_words" title="Permanent link">&para;</a></h3>
@@ -1270,7 +1270,7 @@ Puma threads, Sidekiq workers, or Ractor-based agents.</p>
 </span><span id="__span-9-2"><a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a><span class="n">store</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="no">RobotLab</span><span class="o">::</span><span class="no">DocumentStore</span><span class="o">.</span><span class="n">new</span>
 </span><span id="__span-9-3"><a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a>
 </span><span id="__span-9-4"><a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="n">threads</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">10</span><span class="o">.</span><span class="n">times</span><span class="o">.</span><span class="n">map</span><span class="w"> </span><span class="k">do</span><span class="w"> </span><span class="o">|</span><span class="n">i</span><span class="o">|</span>
-</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">  </span><span class="no">Thread</span><span class="o">.</span><span class="n">new</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">store</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="ss">:&quot;doc_</span><span class="si">#{</span><span class="n">i</span><span class="si">}</span><span class="ss">&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;Document </span><span class="si">#{</span><span class="n">i</span><span class="si">}</span><span class="s2"> text content&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">}</span>
+</span><span id="__span-9-5"><a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="w">  </span><span class="no">Thread</span><span class="o">.</span><span class="n">new</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">store</span><span class="o">.</span><span class="n">store</span><span class="p">(</span><span class="ss">:"doc_</span><span class="si">#{</span><span class="n">i</span><span class="si">}</span><span class="ss">"</span><span class="p">,</span><span class="w"> </span><span class="s2">"Document </span><span class="si">#{</span><span class="n">i</span><span class="si">}</span><span class="s2"> text content"</span><span class="p">)</span><span class="w"> </span><span class="p">}</span>
 </span><span id="__span-9-6"><a id="__codelineno-9-6" name="__codelineno-9-6" href="#__codelineno-9-6"></a><span class="k">end</span>
 </span><span id="__span-9-7"><a id="__codelineno-9-7" name="__codelineno-9-7" href="#__codelineno-9-7"></a><span class="n">threads</span><span class="o">.</span><span class="n">each</span><span class="p">(</span><span class="o">&amp;</span><span class="ss">:join</span><span class="p">)</span>
 </span><span id="__span-9-8"><a id="__codelineno-9-8" name="__codelineno-9-8" href="#__codelineno-9-8"></a>
@@ -1398,10 +1398,10 @@ Puma threads, Sidekiq workers, or Ractor-based agents.</p>
     
       
       
-      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.tabs.sticky", "navigation.path", "navigation.indexes", "navigation.top", "navigation.footer", "toc.follow", "search.suggest", "search.highlight", "search.share", "header.autohide", "content.code.copy", "content.code.annotate", "content.tabs.link", "content.tooltips", "content.action.edit", "content.action.view"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.instant", "navigation.tracking", "navigation.tabs", "navigation.tabs.sticky", "navigation.path", "navigation.indexes", "navigation.top", "navigation.footer", "toc.follow", "search.suggest", "search.highlight", "search.share", "header.autohide", "content.code.copy", "content.code.annotate", "content.tabs.link", "content.tooltips", "content.action.edit", "content.action.view"], "search": "../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
     
     
-      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      <script src="../assets/javascripts/bundle.a5f9d56c.min.js"></script>
       
     
   </body>
