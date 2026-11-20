@@ -2,7 +2,7 @@ site_name: robot_lab-document_store
 site_description: Embedding-based semantic document search for the RobotLab LLM agent framework
 site_author: Dewayne VanHoozer
 site_url: https://madbomber.github.io/robot_lab-document_store
-copyright: Copyright &copy; 2025 Dewayne VanHoozer
+copyright: Copyright &copy; 2026 Dewayne VanHoozer
 
 repo_name: MadBomber/robot_lab-document_store
 repo_url: https://github.com/MadBomber/robot_lab-document_store

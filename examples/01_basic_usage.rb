@@ -13,7 +13,7 @@
 # Usage:
 #   ruby examples/01_basic_usage.rb
 #   ./examples/01_basic_usage.rb
-#   (Downloads the ~23 MB ONNX model on first run; cached afterwards.)
+#   (Downloads the ~130 MB ONNX model on first run; cached afterwards.)
 
 $LOAD_PATH.unshift File.expand_path('../lib', __dir__)
 
@@ -24,7 +24,7 @@ puts "=" * 60
 puts "Embedding-Based Document Store Demo"
 puts "=" * 60
 puts
-puts "Note: First run downloads the fastembed model (~23 MB, cached)."
+puts "Note: First run downloads the fastembed model (~130 MB, cached)."
 puts
 
 # ---------------------------------------------------------------------------

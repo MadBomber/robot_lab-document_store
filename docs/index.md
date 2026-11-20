@@ -28,7 +28,7 @@ hits.each { |r| puts "#{r[:key]}  score=#{r[:score].round(3)}" }
 |---------|--------|
 | **Semantic search** | Cosine similarity over dense vector embeddings |
 | **Asymmetric embedding** | Separate passage/query embeddings for higher recall |
-| **Thread-safe** | Internal `Mutex` — safe for Puma, Sidekiq, Ractor workers |
+| **Thread-safe** | Internal `Mutex` — safe to share across Puma and Sidekiq threads (not shareable across Ractors) |
 | **Zero-config fallback** | TF-IDF word-frequency search when fastembed is unavailable |
 | **Lazy model init** | ONNX model downloads on first use, cached locally |
 | **RobotLab integration** | Drop-in via `Memory#store_document` / `Memory#search_documents` |

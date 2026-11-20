@@ -32,12 +32,12 @@ store.delete(:key)                  # remove one document
 store.clear                         # remove all documents
 ```
 
-Search results are sorted by score descending (0.0–1.0). The fastembed model is initialised lazily on the first `store` or `search` call — the ONNX model file is downloaded then cached locally.
+Search results are sorted by score descending (clamped to 0.0–1.0). The fastembed model is initialised lazily on the first `store` call (`search` on an empty store returns `[]` without embedding) — the ONNX model file is downloaded then cached locally.
 
 ### Embedding Paths
 
 **Fastembed path** (when `fastembed` gem is installed):
-- `passage_embed` for stored documents, `query_embed` for search queries — asymmetric embedding per the BGE model's design
+- `passage_embed` for stored documents, `query_embed` for search queries — asymmetric embedding (same model; fastembed prepends `"passage: "` / `"query: "` to the text)
 - Dense float vectors, cosine similarity computed inline
 
 **Fallback TF-IDF path** (when fastembed is absent):
@@ -48,7 +48,7 @@ Search results are sorted by score descending (0.0–1.0). The fastembed model i
 
 ### Thread Safety
 
-All reads and writes to `@documents` are protected by a `Mutex`. The fastembed model is not Mutex-protected because `Fastembed::TextEmbedding` is itself thread-safe.
+All reads and writes to `@documents` are protected by a `Mutex`. Lazy creation of the fastembed model is guarded by a separate `@model_mutex` (double-checked in `fastembed_model`, built by `build_fastembed_model`) so concurrent first calls load it once. Embedding calls themselves run outside both locks and rely on `Fastembed::TextEmbedding` being safe to call concurrently.
 
 ### Integration with robot_lab Memory
 
@@ -56,6 +56,8 @@ When `robot_lab-document_store` is loaded alongside `robot_lab`, the Memory clas
 ```ruby
 memory.store_document(:key, text)
 memory.search_documents("query", limit: 5)
+memory.document_keys
+memory.delete_document(:key)
 ```
 
 ## Key Constraints
@@ -68,5 +70,7 @@ memory.search_documents("query", limit: 5)
 ## Testing
 
 - Minitest with SimpleCov (`minimum_coverage line: 95, branch: 75` enforced)
-- Tests stub fastembed to avoid downloading the ONNX model — do not call the real fastembed model in unit tests
-- Coverage: 98.89% line / 95.83% branch
+- `DocumentStoreTest` runs against the real fastembed model (downloaded on first run, then cached); set `ROBOT_LAB_SKIP_EMBEDDINGS=true` to skip those tests
+- The TF-IDF fallback path is tested through a `DocumentStoreFallback` subclass that sets `@using_fastembed = false`
+- Model-init thread safety and score clamping are tested without the real model (`CountingStore` overrides `build_fastembed_model`)
+- Coverage: 98.93% line / 95.83% branch
