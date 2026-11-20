@@ -52,7 +52,7 @@ PROMPT
 ## Pattern 2 — RobotLab Memory Integration
 
 When `robot_lab` core is loaded alongside this gem, `RobotLab::Memory` gains
-three document-store methods automatically via `register_extension`.
+four document-store methods automatically via `register_extension`.
 
 ```ruby
 require "robot_lab"
@@ -154,7 +154,7 @@ end
 # Store with indexed chunk keys
 store = RobotLab::DocumentStore.new
 
-chunk("docs/runbook.md").each_with_index do |text, i|
+chunk(File.read("docs/runbook.md")).each_with_index do |text, i|
   store.store(:"runbook_#{i}", text)
 end
 ```
@@ -183,11 +183,13 @@ recall/precision trade-off. Very long documents dilute the embedding signal;
 very short chunks lose context.
 
 **Limit and threshold.** Retrieve more than you need (`limit: 5`) then drop
-results below a quality threshold (e.g., `score >= 0.4`) before building the
-context string. This avoids injecting unrelated documents.
+results below a quality threshold (e.g., `score >= 0.6`) before building the
+context string. This avoids injecting unrelated documents. Calibrate the
+threshold on your own corpus — with the default model, unrelated documents
+still score around `0.5`, so a low cut-off filters nothing.
 
 ```ruby
-hits = store.search(query, limit: 5).select { |r| r[:score] >= 0.4 }
+hits = store.search(query, limit: 5).select { |r| r[:score] >= 0.6 }
 ```
 
 **Re-embed on document update.** `store` replaces an existing key — calling it

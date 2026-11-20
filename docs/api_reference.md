@@ -65,7 +65,7 @@ similarity score descending.
 |-----|------|-------------|
 | `:key` | `Symbol` | The document key |
 | `:text` | `String` | The stored document text |
-| `:score` | `Float` | Cosine similarity score, range `0.0..1.0` |
+| `:score` | `Float` | Cosine similarity score, clamped to `0.0..1.0` |
 
 Results are sorted by `:score` descending (most similar first). Returns `[]` if
 the store is empty.
@@ -80,9 +80,11 @@ end
 ```
 
 !!! tip "Score interpretation"
-    Scores above `0.7` indicate strong semantic similarity. Scores below `0.3`
-    typically indicate weak or no relationship. The exact thresholds depend on
-    the model and your document corpus.
+    Scores above `0.7` indicate strong semantic similarity. With the default
+    model, scores sit in a narrow band — in the bundled example corpus even a
+    completely unrelated query scores around `0.5` against every document — so
+    compare scores relative to each other rather than against zero. The exact
+    thresholds depend on the model and your document corpus.
 
 ---
 
@@ -165,13 +167,28 @@ The fastembed model used when no `model_name:` is specified.
 A frozen `Set<String>` of common English words excluded from TF-IDF indexing
 (`a`, `an`, `the`, `is`, `are`, …). Only relevant when fastembed is unavailable.
 
+### `FASTEMBED_AVAILABLE`
+
+`true` if `require 'fastembed'` succeeded when this file was loaded, `false`
+otherwise. Marked `@api private` in the source — it selects the dense or
+fallback embedding path for every store created afterwards.
+
+### `VERSION`
+
+```ruby
+RobotLab::DocumentStore::VERSION  # => "0.6.1"
+```
+
 ---
 
 ## Thread Safety
 
 All public methods are thread-safe. An internal `Mutex` serialises access to
-the document hash. You can safely share a single `DocumentStore` instance across
-Puma threads, Sidekiq workers, or Ractor-based agents.
+the document hash, and a second one guards the lazy model initialisation so
+concurrent first calls load the model only once. You can safely share a single `DocumentStore` instance across
+Puma threads or Sidekiq workers. It cannot be shared across Ractors: the
+internal `Mutex` is not shareable, and a store passed into a Ractor is copied,
+so writes made there never reach the original.
 
 ```ruby
 # Safe: multiple threads can store and search concurrently

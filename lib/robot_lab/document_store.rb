@@ -13,9 +13,11 @@ module RobotLab
   # file is downloaded on that first call (cached locally afterwards).
   #
   # When fastembed is not installed, DocumentStore falls back to a lightweight
-  # TF-IDF word-frequency embedder. The fallback is lower quality (no semantic
-  # understanding, only lexical overlap) but works offline with no downloads,
-  # making it suitable for development and testing.
+  # term-frequency (bag-of-words) embedder. It is often loosely called the
+  # "TF-IDF fallback", but no inverse-document-frequency weighting is applied.
+  # The fallback is lower quality (no semantic understanding, only lexical
+  # overlap) but works offline with no downloads, making it suitable for
+  # development and testing.
   #
   # @example Standalone
   #   store = RobotLab::DocumentStore.new
@@ -49,6 +51,7 @@ module RobotLab
       @model_name      = model_name
       @documents       = {} # key (Symbol) => { text: String, vector: Array<Float> }
       @mutex           = Mutex.new
+      @model_mutex     = Mutex.new # guards lazy model init only; never held while embedding
       @fastembed_model = nil # lazy: initialised on first embed call
       @using_fastembed = FASTEMBED_AVAILABLE
     end
@@ -72,7 +75,7 @@ module RobotLab
     # @param query [String] natural-language search query
     # @param limit [Integer] maximum number of results (default 5)
     # @return [Array<Hash>] results sorted by score descending.
-    #   Each hash contains +:key+, +:text+, and +:score+ (Float 0.0..1.0).
+    #   Each hash contains +:key+, +:text+, and +:score+ (Float, clamped to 0.0..1.0).
     # :reek:TooManyStatements -- linear embed/score/sort pipeline; the mutex block inflates the count.
     def search(query, limit: 5)
       return [] if empty?
@@ -134,8 +137,15 @@ module RobotLab
 
     # ── Fastembed path ──────────────────────────────────────────────────────
 
+    # Lazily builds the model exactly once, even when several threads make the
+    # first embed call concurrently. The unlocked read is the fast path; the
+    # second check inside the lock stops a waiting thread from building again.
     def fastembed_model
-      @fastembed_model ||= Fastembed::TextEmbedding.new(model_name: @model_name, show_progress: false)
+      @fastembed_model || @model_mutex.synchronize { @fastembed_model ||= build_fastembed_model }
+    end
+
+    def build_fastembed_model
+      Fastembed::TextEmbedding.new(model_name: @model_name, show_progress: false)
     end
 
     def passage_vector(text)
@@ -154,10 +164,13 @@ module RobotLab
       end
     end
 
+    # Cosine similarity clamped to 0.0..1.0. Raw cosine can be negative for
+    # dense vectors and can overshoot 1.0 by a rounding error on either path.
     def cosine_similarity(vec_a, vec_b)
       return 0.0 unless vec_a && vec_b
 
-      @using_fastembed ? dense_cosine(vec_a, vec_b) : sparse_cosine(vec_a, vec_b)
+      raw = @using_fastembed ? dense_cosine(vec_a, vec_b) : sparse_cosine(vec_a, vec_b)
+      raw.clamp(0.0, 1.0)
     end
 
     # :reek:FeatureEnvy -- pure vector math over its two arguments; there is no better home than the store that owns both paths.
@@ -182,7 +195,7 @@ module RobotLab
       dot / (Math.sqrt(norm_a) * Math.sqrt(norm_b))
     end
 
-    # ── Fallback TF-IDF word-frequency path ─────────────────────────────────
+    # ── Fallback term-frequency path (no IDF weighting) ─────────────────────
 
     # Returns a sparse Hash{String => Float} L2-normalised term-frequency vector.
     # :reek:FeatureEnvy -- builds and normalises the local counts hash it returns; there is no other object involved.

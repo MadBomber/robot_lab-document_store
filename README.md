@@ -7,7 +7,7 @@ Embedding-based semantic document search for the [RobotLab](https://github.com/M
 
 ## What it provides
 
-`RobotLab::DocumentStore` is a thread-safe, in-memory vector store backed by [fastembed](https://github.com/Anush008/fastembed-ruby) embeddings and cosine similarity search. It supports:
+`RobotLab::DocumentStore` is a thread-safe, in-memory vector store backed by [fastembed](https://github.com/khasinski/fastembed-rb) embeddings and cosine similarity search. It supports:
 
 - **`store(key, text)`** — embed and store a document under a symbol key
 - **`search(query, limit:)`** — return the top-N most similar documents by cosine similarity
@@ -37,8 +37,8 @@ results = store.search("What language is popular for AI?", limit: 2)
 results.each do |r|
   puts "#{r[:key]} (score: #{"%.3f" % r[:score]})"
 end
-# => beta (score: 0.872)
-# => alpha (score: 0.641)
+# => beta (score: 0.712)
+# => alpha (score: 0.636)
 ```
 
 ## Custom Model
@@ -78,12 +78,12 @@ puts result.last_text_content
 ## Links
 
 - [RobotLab Core](https://github.com/MadBomber/robot_lab)
-- [fastembed-ruby](https://github.com/Anush008/fastembed-ruby)
+- [fastembed-rb](https://github.com/khasinski/fastembed-rb)
 - [RubyGems](https://rubygems.org/gems/robot_lab-document_store)
 
 ## License
 
-MIT License - Copyright (c) 2025 Dewayne VanHoozer
+MIT License - Copyright (c) 2026 Dewayne VanHoozer
 
 ## Contributing
 

@@ -26,9 +26,9 @@ When fastembed is available, the store uses [BAAI/bge-small-en-v1.5](https://hug
 
 ### Asymmetric Embedding
 
-The model uses **separate encoders** for passages (stored documents) and queries (search terms). This is deliberate: a passage encoder is optimised to capture what a document *contains*, while a query encoder is optimised to capture what a user *wants*. Using the same encoder for both degrades recall on semantically paraphrased queries.
+The store uses **separate fastembed calls** for passages (stored documents) and queries (search terms). Both run through the same model; fastembed prepends `"passage: "` to stored text and `"query: "` to search text before embedding, so the two kinds of input are marked differently — one as what a document *contains*, the other as what a user *wants*.
 
-| Call | Encoder used | Purpose |
+| Call | fastembed method | Purpose |
 |------|-------------|---------|
 | `store(key, text)` | `passage_embed` | Captures document content |
 | `search(query)` | `query_embed` | Captures search intent |
@@ -46,6 +46,9 @@ direction (maximum similarity); `0.0` means orthogonal (no relationship). The
 BGE model normalises its output to unit length, so the division reduces to a simple
 dot product — but `DocumentStore` performs explicit normalisation anyway to remain
 correct regardless of the model used.
+
+The result is **clamped to `0.0..1.0`** on both embedding paths: a negative cosine
+becomes `0.0`, and a floating-point overshoot such as `1.0000000000000002` becomes `1.0`.
 
 **Defensive guards** return `0.0` for nil vectors, empty vectors, or length mismatches.
 These protect against partial or corrupted embed results without raising exceptions.
@@ -71,8 +74,13 @@ raw text
 ```
 
 The result is a unit-length sparse vector. Similarity between two sparse vectors
-uses the same cosine formula, but computed efficiently by iterating only over the
-keys present in the smaller vector.
+uses the same cosine formula: the dot product iterates only over the terms of the
+query vector (looking each one up in the document vector), and the norms are
+recomputed from each vector's values.
+
+Despite the "TF-IDF" label used throughout these docs, no
+inverse-document-frequency weighting is applied — the vectors are plain
+L2-normalised term frequencies.
 
 ### Stemmer
 
@@ -80,7 +88,7 @@ The stemmer applies suffix rules in priority order and stops at the first match:
 
 | Rule | Example |
 |------|---------|
-| `-ies` → `-y` | `activities` → `activiti` |
+| `-ies` → `-y` | `activities` → `activity` |
 | `-ness` → `` | `darkness` → `dark` |
 | `-ment` → `` | `development` → `develop` |
 | `-tion` → `` | `configuration` → `configura` |
@@ -113,15 +121,18 @@ Embedding (which can be slow — tens of milliseconds for the first call) happen
 def store(key, text)
   key    = key.to_sym
   vector = passage_vector(text)          # ← compute outside the lock
-  @mutex.synchronize do
-    @documents[key] = { text:, vector: } # ← write inside the lock
-  end
+  @mutex.synchronize { @documents[key] = { text: text, vector: vector } } # ← write inside the lock
   self
 end
 ```
 
 This means multiple threads can embed documents concurrently. The lock only
 serialises the final hash write and all reads.
+
+The lazy fastembed model initialisation has its own separate `Mutex`, so several
+threads making the first embed call at once load the model exactly once. That
+lock is released before embedding starts and is never held together with the
+documents lock.
 
 ---
 
@@ -136,6 +147,6 @@ end
 ```
 
 This registers the class with robot_lab core when both gems are loaded together,
-enabling `Memory#store_document`, `Memory#search_documents`, and `Memory#document_keys`
-on any `RobotLab::Memory` instance. The guard makes the file safe to `require`
+enabling `Memory#store_document`, `Memory#search_documents`, `Memory#document_keys`,
+and `Memory#delete_document` on any `RobotLab::Memory` instance. The guard makes the file safe to `require`
 standalone without robot_lab present.

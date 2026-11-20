@@ -155,7 +155,7 @@ module RobotLab
 end
 
 # ---------------------------------------------------------------------------
-# Subclass that disables fastembed to exercise the TF-IDF fallback path
+# Subclass that disables fastembed to exercise the term-frequency fallback path
 # without requiring the fastembed gem to be absent.
 # ---------------------------------------------------------------------------
 
@@ -198,7 +198,7 @@ module RobotLab
     end
 
     def test_stopwords_only_text_scores_zero
-      # All stop words → empty TF-IDF vector → sparse_cosine({}, {}) → 0.0
+      # All stop words → empty term-frequency vector → sparse_cosine({}, {}) → 0.0
       @store.store(:stopwords, 'the a an is are')
       results = @store.search('the a an', limit: 1)
       assert_equal 0.0, results.first[:score]
@@ -243,6 +243,93 @@ module RobotLab
 
     def test_cosine_similarity_returns_zero_for_zero_vector
       assert_equal 0.0, @store.send(:cosine_similarity, [0.0, 0.0], [1.0, 2.0])
+    end
+  end
+end
+
+# ---------------------------------------------------------------------------
+# Regression: lazy fastembed model initialisation must be thread-safe.
+# CountingStore swaps the real model build for a slow fake so the race window
+# is wide and no ONNX model is loaded.
+# ---------------------------------------------------------------------------
+
+module RobotLab
+  class CountingStore < RobotLab::DocumentStore
+    attr_reader :builds
+
+    def initialize(...)
+      super
+      @builds = Queue.new
+    end
+
+    private
+
+    def build_fastembed_model
+      @builds << :built
+      sleep 0.05
+      Object.new
+    end
+  end
+end
+
+module RobotLab
+  class DocumentStoreModelInitTest < Minitest::Test
+    def test_concurrent_first_use_builds_model_once
+      store  = RobotLab::CountingStore.new
+      models = Array.new(8) { Thread.new { store.send(:fastembed_model) } }.map(&:value)
+
+      assert_equal 1, store.builds.size, 'model must be built exactly once'
+      assert_equal 1, models.uniq(&:object_id).size, 'every thread must get the same model'
+    end
+
+    def test_model_is_memoised_after_first_use
+      store = RobotLab::CountingStore.new
+      first = store.send(:fastembed_model)
+
+      assert_same first, store.send(:fastembed_model)
+      assert_equal 1, store.builds.size
+    end
+
+    def test_model_is_not_built_at_construction
+      assert_equal 0, RobotLab::CountingStore.new.builds.size
+    end
+  end
+end
+
+# ---------------------------------------------------------------------------
+# Regression: scores are clamped to 0.0..1.0 on both embedding paths.
+# ---------------------------------------------------------------------------
+
+module RobotLab
+  class DocumentStoreScoreClampTest < Minitest::Test
+    def test_dense_negative_cosine_is_clamped_to_zero
+      store = RobotLab::DocumentStore.new
+
+      assert_equal(-1.0, store.send(:dense_cosine, [1.0, 0.0], [-1.0, 0.0]))
+      assert_equal 0.0, store.send(:cosine_similarity, [1.0, 0.0], [-1.0, 0.0])
+    end
+
+    def test_dense_rounding_overshoot_is_clamped_to_one
+      store = RobotLab::DocumentStore.new
+      vec   = [1.0, 1.0, 1.0]
+
+      assert_operator store.send(:dense_cosine, vec, vec), :>, 1.0
+      assert_equal 1.0, store.send(:cosine_similarity, vec, vec)
+    end
+
+    def test_sparse_rounding_overshoot_is_clamped_to_one
+      store = RobotLab::DocumentStoreFallback.new
+      vec   = store.send(:fallback_vector, 'connection pool exhausted')
+
+      assert_operator store.send(:sparse_cosine, vec, vec), :>, 1.0
+      assert_equal 1.0, store.send(:cosine_similarity, vec, vec)
+    end
+
+    def test_fallback_exact_match_search_score_never_exceeds_one
+      store = RobotLab::DocumentStoreFallback.new
+      store.store(:doc, 'connection pool exhausted')
+
+      assert_equal 1.0, store.search('exhausted pool connection').first[:score]
     end
   end
 end

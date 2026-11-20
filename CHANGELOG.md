@@ -1,5 +1,12 @@
 ## [Unreleased]
 
+### Fixed
+
+- **Lazy fastembed model initialisation is now thread-safe.** Concurrent first calls to `store` load the model exactly once; a dedicated mutex guards only the initialisation and is never held while embedding.
+- **Search scores are clamped to `0.0..1.0`** on both the dense and fallback paths. Previously a floating-point overshoot (e.g. `1.0000000000000002`) or a negative dense cosine could escape the documented range.
+- Code comments no longer describe the fallback embedder as TF-IDF — it is plain L2-normalised term frequency with no IDF weighting (algorithm unchanged).
+- Documentation corrected against the code: fastembed is a runtime dependency (not optional), the model download is ~130 MB (not ~23 MB), fastembed link, example scores, stemmer table, Ractor sharing (unsupported), chunking snippet, and copyright year (2026) in README and `mkdocs.yml`.
+
 ## [0.6.1] - 2026-11-19
 
 ### Changed
